@@ -15,4 +15,4 @@ The folders within [ ./src/main/resources ] closely resemble the sample NIEM MPD
         
 For more information, see the [ ./src/main/resources/documentation ] folder.  Also, be sure to view the readme files in their respective folders for specific instructions.
 
-This work is derived from authoritative MIL-STD-6040 USMTF XML work maintained at the [ <a href="https://software.forge.mil/sf/projects/mtfxml" target="_blank">software.forge.mil MTFXML project</a> ].
+This work is derived from authoritative MIL-STD-6040 USMTF XML work maintained on Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/mtfxml" target="_blank">MTF XML</a> ].  A subset of the work is also on Git Hub at [ <a href="https://github.com/mil-oss/MTFXML" target="_blank">Mil-OSS/MTFXML</a> ] .
