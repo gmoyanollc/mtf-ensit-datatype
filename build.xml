@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="build" default="" 
+  xmlns:if="ant:if"
+  xmlns:unless="ant:unless"
+  xmlns:au="antlib:org.apache.ant.antunit">
+
+  <!--<property name="output.dir" value="buildIepdOutput"/>-->
+  <!--<property name="source.git" value="https://github.com/NIEM/Template-IEPD.git"/>-->
+  <!--<property name="working.git" value="/f/gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype"/>-->
+  <!--<property name="workingsvn.git" value="/f/gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>-->
+  <property name="temp.file" value="ignore.ant"/>
+  <!--<property name="originrepo.git" value=""/>-->
+  <!--<property name="test.output.dir" value="${basedir}/src/test/resources"/>-->
+  <!--<property name="xsd.dir" value="${basedir}/src/main/resources/base-xsd"/>-->
+  <!--<property name="xsl-transformer" value="/usr/share/java/saxon/saxon.jar"/>-->
+  <!--<property name="xsl.dir" value="${basedir}/src/test/resources/xsl"/>-->
+  <!--<property name="schematron-validator"
+    value="${basedir}/src/test/resources/lib/ant-schematron-2010-04-14.jar"/>-->
+  <!--<property name="schematron.dir" value="${basedir}/src/test/resources/schematron"/>-->
+  
+  <target name="cleanOutputDir">
+    <delete dir="${output,dir}"/>
+    <mkdir dir="${output,dir}"/>
+  </target>
+
+  <target name="generateCopy">
+    <xslt style="${xsl.dir}/???" destdir="" basedir="">
+      <classpath path="${xsl-transformer}"/>
+      <factory name="???"/>
+      <fileset dir=".">
+        <include name="*.xml"/>
+      </fileset>
+    </xslt>
+  </target>
+
+  <target name="validateSchema">
+    <echo message="g...${project.basedir}"/>
+    <!--    <schemavalidate file="src/main/resources/iep-sample/mtf6040ENSITinstance1novalues.xml"
+      classpath="/usr/share/java/saxon/saxon.jar" classname="net.sf.saxon.jxp.ValidatingReader">-->
+    <schemavalidate file="src/main/resources/iep-sample/mtf6040ENSITinstance1novalues.xml">
+      <schema url="file://src/main/resources/base-xsd/extension/mtfEnsitS309.xsd"
+        namespace="http://ensit"/>
+    </schemavalidate>
+  </target>
+
+  <target name="validateSchematron">
+    <echo message="class path to Saxon may be provided via ant command-line agrument '-lib' for provider net.sf.saxon.TransformerFactoryImpl"/>
+    <echo message="testing 'saxon' match in Java ClassPath..."/>
+    <script language="javascript">
+      <![CDATA[
+      var arrayJavaClassPath = project.getProperty('java.class.path').split(':');
+      var keyContainingSaxon;
+      
+      for (key = 0; key < arrayJavaClassPath.length; ++key) {
+        value = arrayJavaClassPath[key];
+        if (value.match(/saxon/i)) {
+          keyContainingSaxon = key;
+          break;
+        }
+      }
+      
+      project.setProperty('classpathsaxonmatch', arrayJavaClassPath[keyContainingSaxon]);
+      ]]>
+    </script>
+    <echo message="first 'saxon' match in classpath: ${classpathsaxonmatch}"/>
+    <echo message="schematron-validator: ${schematron-validator}"/>
+    <echo message="schematron-transformer: ${xsl-transformer}"/>
+    <taskdef name="schematron" 
+      classname="com.schematron.ant.SchematronTask"
+      classpath="${schematron-validator};${xsl-transformer}"/>
+    <echo message="schematron-dir: ${schematron.dir}"/>
+    <echo message="validate.source.dir: ${xsd.dir}"/>
+    <echo message="validating..."/>
+    <schematron schema="${schematron.dir}/generated-schema.sch"
+      file="${xsd.dir}/niem/domains/militaryOperations/3.1/mo.xsd" debugMode="true"
+      />
+  </target>
+
+  <target name="transformXml">
+    <xslt in="${xsd.dir}/niem/domains/militaryOperations/3.1/mo.xsd" out="${test.output.dir}/mo.txt"
+      style="${test.output.dir}/xsl/copy.xsl" force="true">
+      <classpath path="${xsl-transformer}"/>
+    </xslt>
+  </target>
+
+  <extension-point name="build" depends=""/>
+  
+</project>

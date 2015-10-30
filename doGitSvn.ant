@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="doGitSvn" default="commitGit" 
+  xmlns:if="ant:if"
+  xmlns:unless="ant:unless"
+  xmlns:au="antlib:org.apache.ant.antunit">
+
+<!--
+    doGitSvn.ant contains tasks that support the following repository work flow:
+   
+            /....................................\
+            |             git origin             |
+            \..................................../ 
+                |                          |
+               / \                         |
+                |                         \ /
+                |                          |
+    /.....................\    /.........................\
+    |  working git clone  |    |  working svn git clone  |
+    \...................../    \........................./
+                                           |
+                                           |
+                                          \ /
+                                           |
+                                   /..................\
+                                   |  svn repository  |
+                                   \................../
+
+    Task are oriented for execution in a git bash session on a Windows platform.
+    The Windows platform facilitates network and CAC-authenticated connectivity.
+    A Linux platform is used for software development purposes.
+    
+    author: George Moyano
+-->
+
+  <property name="working.git.dir.linux1" value="/home/g/sf_gData_2015TaskNiem/mtf.datatype"/>
+  <property name="working.git.dir.linux2" value="/media/sf_gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype"/>
+  <property name="working.git.dir.windows" value="F:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype"/>
+  <property name="origin.git.dir.windows" value="Z:\mtf.datatype.git"/>
+  <!--<property name="working.svn.dir.linux1" value="/home/g/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>
+  <property name="working.svn.dir.linux2" value="/media/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>-->
+  <property name="working.svn.dir.windows" value="F:\gPublished\Project\TSOA\Product\ForgeSoiMessaging\TsoaInformationModel\DataFormat\mtf.datatype"/>
+  <property name="temp.file" value="ignore.ant"/>
+
+  <macrodef name="math.increment">
+    <attribute name="operator1"/>
+    <attribute name="result"/>
+    <sequential>
+      <script language="javascript">
+        project.setProperty("@{result}", parseInt("@{operator1}")+1);
+      </script>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="git-get">
+    <!-- returned value is stored in passed property -->
+    <!-- standard output displayed by ant is trumped even when outputproperty is empty -->
+    <attribute name="gitCommand"/>
+    <attribute name="dir" default=""/>
+    <!-- gINSERT -->
+    <attribute name="outputproperty"  default=""/>
+    <attribute name="output" default="${temp.file}"/>
+    <element name="args" optional="true"/>
+    <sequential>
+      <echo message="git @{gitCommand}"/>
+      <!-- gMODIFY -->
+      <!--<exec executable="git" dir="@{dir}">-->
+      <exec executable="git" dir="@{dir}" outputproperty="@{outputproperty}" output="@{output}">
+        <arg value="@{gitCommand}"/>
+        <args/>
+      </exec>
+    </sequential>
+  </macrodef>
+  
+  <!-- gBEGIN http://tlrobinson.net/blog/2008/11/ant-tasks-for-git/ -->
+  <!-- gMODIFY -->
+  <macrodef name="git">
+    <attribute name="gitCommand"/>
+    <attribute name="dir" default=""/>
+    <element name="args" optional="true"/>
+    <sequential>
+      <echo message="git @{gitCommand}"/>
+      <exec executable="git" dir="@{dir}">
+        <arg value="@{gitCommand}"/>
+        <args/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="git-clone-pull">
+    <attribute name="repository"/>
+    <attribute name="dest"/>
+    <sequential>
+      <git command="clone">
+        <args>
+          <arg value="@{repository}"/>
+          <arg value="@{dest}"/>
+        </args>
+      </git>
+      <git command="pull" dir="@{dest}"/>
+    </sequential>
+  </macrodef>
+  <!-- gEND http://tlrobinson.net/blog/2008/11/ant-tasks-for-git/ -->
+  
+  <macrodef name="getGit-user.commits-since-last-svn-commit">
+    <attribute name="git-user.commits-since-last-svn-commit"/>
+    <sequential>
+      <git-get gitCommand="config" outputproperty="@{git-user.commits-since-last-svn-commit}">
+        <args>
+          <arg line="--global --get user.commits-since-last-svn-commit"/>
+        </args>
+      </git-get>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="generateGitLogMessage">
+    <attribute name="gitLogMessage"/>
+    <sequential>
+      <local name="_git-user.commits-since-last-svn-commit"/>
+      <echo message="getting Git user.commits-since-last-svn-commit ..."/>
+      <getGit-user.commits-since-last-svn-commit 
+        Git-user.commits-since-last-svn-commit="_git-user.commits-since-last-svn-commit"/>   
+      <echo message="generating Git log output with ${_git-user.commits-since-last-svn-commit} commit(s) ..."/>
+      <git-get gitCommand="log" outputproperty="@{gitLogMessage}">
+        <args>
+          <arg line="--pretty=format:'  %s%n  git commit by: %cn on %cd' --name-status -n ${_git-user.commits-since-last-svn-commit}"/>
+        </args>
+      </git-get>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="svn">
+    <attribute name="svnCommand"/>
+    <attribute name="dir" default=""/>
+    <element name="args" optional="true"/>
+    <sequential>
+      <echo message="svn @{svnCommand}"/>
+      <exec executable="svn" dir="@{dir}">
+        <arg value="@{svnCommand}"/>
+        <args/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <target name="updateGitHubClone">
+    <copy todir="../mtf.datatype.github/mtf.datatype/">
+      <fileset dir="${basedir}" includes="*">
+        <type type="file"/>
+      </fileset>
+      <fileset dir="src/main/resources/documentation/" excludes="*Mapping.*"/>
+    </copy>
+  </target>
+
+  <target name="cleanOutputDir">
+    <delete dir="${output,dir}"/>
+    <mkdir dir="${output,dir}"/>
+  </target>
+
+  <target name="cloneSourceGit" depends="cleanOutputDir">
+    <git command="clone">
+      <args>
+        <arg value="${source.git}"/>
+      </args>
+    </git>
+  </target>
+
+  <target name="testCloneSourceGit">
+    <au:assertFileExists file="Template-IEPD/mpd-catalog.xml"/>
+  </target>
+  
+  <target name="incrementGit-user.commits-since-last-svn-commit">
+    <local name="_git-user.commits-since-last-svn-commit"/>
+    <local name="_git-user.commits-since-last-svn-commit++"/>
+    <echo message="getting Git user.commits-since-last-svn-commit ..."/>
+    <getGit-user.commits-since-last-svn-commit 
+      Git-user.commits-since-last-svn-commit="_git-user.commits-since-last-svn-commit"/>
+    <echo message="incrementing Git user.commits-since-last-svn-commit: ${_git-user.commits-since-last-svn-commit}"/>
+    <math.increment operator1="${_git-user.commits-since-last-svn-commit}" 
+      result="_git-user.commits-since-last-svn-commit++"/>
+    <echo message="Git user.commits-since-last-svn-commit: ${_git-user.commits-since-last-svn-commit++}"/>
+    <git gitCommand="config">
+      <args>
+        <arg line="--global user.commits-since-last-svn-commit ${_git-user.commits-since-last-svn-commit++}"/>
+      </args>
+    </git>
+    <antcall target="testGit-user.commits-since-last-svn-commit"/>
+  </target>
+  
+  <target name="testGit-user.commits-since-last-svn-commit">
+    <local name="_git-user.commits-since-last-svn-commit"/>
+    <local name="_git-user.commits-since-last-svn-commit.exist"/>
+    <echo message="getting Git user.commits-since-last-svn-commit ..."/>
+    <getGit-user.commits-since-last-svn-commit 
+      Git-user.commits-since-last-svn-commit="_git-user.commits-since-last-svn-commit"/>
+    <echo message="testing Git user.commits-since-last-svn-commit ..."/>
+    <echo message="$${_git-user.commits-since-last-svn-commit}: ${_git-user.commits-since-last-svn-commit}"/>
+    <condition property="_git-user.commits-since-last-svn-commit.exist" else="false">
+      <not>
+      <equals arg1="${_git-user.commits-since-last-svn-commit}" arg2=""/>
+      </not>
+    </condition>
+    <echo message="Does Git user.commits-since-last-svn-commit exist?: ${_git-user.commits-since-last-svn-commit.exist}"/>
+    <antcall target="-initGit-user.commits-since-last-svn-commit" 
+        if:true="${_git-user.commits-since-last-svn-commit}"/>  
+  </target>
+
+  <target name="testWorkingGitDir">
+    <condition property="isWorkingGitDir" else="false">
+      <or>
+        <equals arg1="${working.git.dir.linux1}" arg2="${basedir}"/>
+        <equals arg1="${working.git.dir.linux2}" arg2="${basedir}"/>
+        <equals arg1="${working.git.dir.windows}" arg2="${basedir}"/>
+      </or>
+    </condition>
+    <echo message="Valid Git working directories:"/>
+    <echo message="${working.git.dir.linux1}"/>
+    <echo message="${working.git.dir.linux2}"/>
+    <echo message="${working.git.dir.windows}"/>
+    <echo message="Valid Git working directory?: ${isWorkingGitDir}"/>
+  </target>
+  
+  <target name="testOriginGitDir" if="${isWorkingGitDir}">
+    <local name="_isOriginGitDirAvailable.set"/>
+    <available property="isOriginGitDirAvailable" file="${origin.git.dir.windows}" type="dir"/>
+    <condition property="_isOriginGitDirAvailable.set" else="false">
+      <isset property="isOriginGitDirAvailable"/>
+    </condition>
+    <echo message="Valid Git Origin directory:"/>
+    <echo message="${origin.git.dir.windows}"/>
+    <echo message="Is Git Origin directory available?: ${_isOriginGitDirAvailable.set}"/>
+  </target>
+  
+  <target name="testWorkingSvnDir" depends="testWorkingGitDir" if="${isWorkingGitDir}">
+    <local name="_isWorkingSvnDirAvailable.set"/>
+    <available property="isWorkingSvnDirAvailable" file="${working.svn.dir.windows}" type="dir"/>
+    <condition property="_isWorkingSvnDirAvailable.set" else="false">
+      <isset property="isWorkingSvnDirAvailable"/>
+    </condition>
+    <echo message="Valid Svn working directory:"/>
+<!--    <echo message="${working.svn.dir.linux1}"/>
+    <echo message="${working.svn.dir.linux2}"/>-->
+    <echo message="${working.svn.dir.windows}"/>
+    <echo message="Is Svn working directory available?: ${_isWorkingSvnDirAvailable.set}"/>
+  </target>
+
+  <target name="-initGit-user.commits-since-last-svn-commit">
+    <echo message="initializing Git user.commits-since-last-svn-commit ..."/>
+    <git gitCommand="config">
+      <args>
+        <arg line="--global --add user.commits-since-last-svn-commit 0"/>
+      </args>
+    </git>
+    <antcall target="testGit-user.commits-since-last-svn-commit"/>
+  </target>
+  
+  <target name="-disposeGit-user.commits-since-last-svn-commit">
+    <echo message="disposing Git user.commits-since-last-svn-commit ..."/>
+    <git gitCommand="config">
+      <args>
+        <arg line="--global --unset user.commits-since-last-svn-commit"/>
+      </args>
+    </git>
+  </target>
+  
+  <target name="generateSvnCommitMessage" depends="testWorkingSvnDir" if="${isWorkingSvnDirAvailable}">
+    <local name="_commitMessage"/>
+    <local name="_commitMessage.file"/>
+    <echo message="generating SVN Commit message from Git Log ..."/>
+    <generateGitLogMessage gitLogMessage="_commitMessage"/>
+  </target>
+  
+  <target name="doSvnCommitMessage" depends="generateSvnCommitMessage" if="${isWorkingSvnDirAvailable}">
+    <local name="_userCommitSvnResponse"/>
+    <local name="_userCommitSvnResponse.y"/>
+    <echo message="reading file containing generated SVN Commit message ..."/>
+    <loadfile property="_commitMessage.file" srcfile="${temp.file}" failonerror="true"/>
+    <echo message="${_commitMessage.file}"/>
+    <input message="Add and commit these files? [y n] " 
+      defaultvalue="y" addproperty="_userCommitSvnResponse" validargs="y,n"/>
+    <condition property="_userCommitSvnResponse.y">
+      <equals arg1="${_userCommitSvnResponse}" arg2="y"/>
+    </condition>
+    <antcall target="-doCommitSvn" if:true="${_userCommitSvnResponse.y}"/>
+  </target>
+    
+  <target name="-doCommitGit">
+    <local name="_commitMessage"/>
+    <echo message="Ok ..."/>
+    
+    <input message="commit message: " addproperty="_commitMessage"/>
+    <echo message="adding and committing files ..."/>
+    <git gitCommand="add">
+      <args>
+        <arg line=". -v"/>
+      </args>
+    </git>
+    <git gitCommand="commit">
+      <args>
+        <arg line="-am '${_commitMessage}'"/>
+      </args>
+    </git>
+    <antcall target="incrementGit-user.commits-since-last-svn-commit"/>
+  </target>
+  
+  <target name="-doCommitSvn">
+    <local name="_userSuccessSvnResponse"/>
+    <local name="_userSuccessSvnResponse.y"/>
+    <echo message="Ok ..."/>
+    <echo message="adding and committing files ..."/>
+    <svn svnCommand="add">
+      <args>
+        <arg line="${working.svn.dir.windows} --force"/>
+      </args>
+    </svn>
+    <svn svnCommand="commit">
+      <args>
+        <arg line="${working.svn.dir.windows} --file ${temp.file} --force-log"/>
+      </args>
+    </svn>
+    <input message="Did the SVN Commit complete successfully? [y n] " 
+      defaultvalue="y" addproperty="_userSuccessSvnResponse" validargs="y,n"/>
+    <condition property="_userSuccessSvnResponse.y">
+      <equals arg1="${_userSuccessSvnResponse}" arg2="y"/>
+    </condition>
+    <antcall target="-disposeGit-user.commits-since-last-svn-commit" 
+      if:true="${_userSuccessSvnResponse.y}"/>
+  </target>
+  
+  <target name="doPushGit" depends="testWorkingGitDir, testOriginGitDir" if="${isOriginGitDirAvailable}">
+    <echo message="Ok ..."/>
+    <echo message="pushing Git ..."/>
+    <git gitCommand="push"/>
+  </target>
+  
+  <target name="doPullGit" depends="testWorkingSvnDir, testOriginGitDir" if="${isWorkingSvnDirAvailable}">
+    <echo message="Ok ..."/>
+    <echo message="pulling Git to target directory:"/>
+    <echo message="${working.svn.dir.windows}"/>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${working.svn.dir.windows} pull"/>
+      </args>
+	</git>  
+  </target>
+  
+  <target name="commitWorkingGit" 
+    depends="testWorkingGitDir, testGit-user.commits-since-last-svn-commit" 
+    if="${isWorkingGitDir}"
+    description="Commit to Git, increase commit count since the last SVN Commit, push to Git Origin, and commit to SVN.">
+    <local name="_userCommitGitResponse"/>
+    <local name="_userCommitGitResponse.y"/>
+    <local name="_userPushGitResponse"/>
+    <local name="_userPushGitResponse.y"/>
+    <local name="_userCommitSvnResponse"/>
+    <local name="_userCommitSvnResponse.y"/>
+    <git gitCommand="status"/>
+    
+    <input message="Add and commit these files? [y n] " 
+      defaultvalue="y" addproperty="_userCommitGitResponse" validargs="y,n"/>
+    <condition property="_userCommitGitResponse.y">
+      <equals arg1="${_userCommitGitResponse}" arg2="y"/>
+    </condition>
+    <antcall target="-doCommitGit" if:true="${_userCommitGitResponse.y}"/>
+    
+    <input message="Push Git to Origin? [y n] " 
+      defaultvalue="y" addproperty="_userPushGitResponse" validargs="y,n"/>
+    <condition property="_userPushGitResponse.y">
+      <equals arg1="${_userPushGitResponse}" arg2="y"/>
+    </condition>
+    <antcall target="doPushGit" if:true="${_userPushGitResponse.y}"/>
+    
+    <input message="Pull Git Origin and commit SVN working copy? [y n] " 
+      defaultvalue="y" addproperty="_userCommitSvnResponse" validargs="y,n"/>
+    <condition property="_userCommitSvnResponse.y">
+      <equals arg1="${_userCommitSvnResponse}" arg2="y"/>
+    </condition>
+    <antcall target="commitWorkingSvn" if:true="${_userCommitSvnResponse.y}"/>
+  </target>
+
+  <target name="commitWorkingSvn" 
+    depends="testWorkingGitDir, testGit-user.commits-since-last-svn-commit"
+    if="${isWorkingGitDir}"
+    description="Pull Git Origin and commit SVN working copy.">
+    <local name="_userPullGitResponse"/>
+    <local name="_userPullGitResponse.y"/>
+    
+    <input message="Pull Git Origin to SVN working copy? [y n] " 
+      defaultvalue="y" addproperty="_userPullGitResponse" validargs="y,n"/>
+    <condition property="_userPullGitResponse.y">
+      <equals arg1="${_userPullGitResponse}" arg2="y"/>
+    </condition>
+    <antcall target="doPullGit" if:true="${_userPullGitResponse.y}"/>
+    <!--<antcall target="generateSvnCommitMessage"/>-->
+    <!--<antcall target="-doCommitSvn" if:true="${_userCommitSvnResponse.y}"/>-->
+    <antcall target="doSvnCommitMessage"/>
+  </target>
+
+  <extension-point name="commitGit" depends="commitWorkingGit"/>
+  <extension-point name="commitSvn" depends="commitWorkingSvn"/>
+  
+</project>
