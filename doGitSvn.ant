@@ -30,8 +30,11 @@
     A Linux platform is used for software development purposes.
     
     author: George Moyano
+    version: 1.0.1 
+    updated: Oct 2015
 -->
 
+  <defaultexcludes add="**/.git/**, **/.gitignore"/>
   <property name="working.git.dir.linux1" value="/home/g/sf_gData_2015TaskNiem/mtf.datatype"/>
   <property name="working.git.dir.linux2" value="/media/sf_gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype"/>
   <property name="working.git.dir.windows" value="F:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype"/>
@@ -39,6 +42,10 @@
   <!--<property name="working.svn.dir.linux1" value="/home/g/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>
   <property name="working.svn.dir.linux2" value="/media/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>-->
   <property name="working.svn.dir.windows" value="F:\gPublished\Project\TSOA\Product\ForgeSoiMessaging\TsoaInformationModel\DataFormat\mtf.datatype"/>
+  <property name="working.github.dir.linux1" value="/home/g/sf_gData_2015TaskNiem/mtf.datatype.github/mtf.datatype"/>
+  <property name="working.github.dir.linux2" value="/media/sf_gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype.github/mtf.datatype"/>
+  <property name="working.github.dir.windows" value="F:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype.github\mtf.datatype"/>
+  <property name="documentation.dir" value="src/main/resources/documentation/"/>
   <property name="temp.file" value="ignore.ant"/>
 
   <macrodef name="math.increment">
@@ -141,13 +148,17 @@
     </sequential>
   </macrodef>
 
-  <target name="updateGitHubClone">
-    <copy todir="../mtf.datatype.github/mtf.datatype/">
-      <fileset dir="${basedir}" includes="*">
+  <target name="updateGitHubClone" depends="testWorkingGitDir, testWorkingGitHubDir" 
+    if="${workingGitHubDir.set}">
+    <sync todir="${workingGitHubDir}" verbose="true">
+      <fileset dir="${basedir}" includes="*" excludes="ignore.ant*"> 
         <type type="file"/>
       </fileset>
-      <fileset dir="src/main/resources/documentation/" excludes="*Mapping.*"/>
-    </copy>
+      <fileset dir="${documentation.dir}" excludes="*mapping.*"/>
+      <preserveintarget>
+        <include name="**/.git/**"/>
+      </preserveintarget>
+    </sync>
   </target>
 
   <target name="cleanOutputDir">
@@ -231,7 +242,8 @@
   
   <target name="testWorkingSvnDir" depends="testWorkingGitDir" if="${isWorkingGitDir}">
     <local name="_isWorkingSvnDirAvailable.set"/>
-    <available property="isWorkingSvnDirAvailable" file="${working.svn.dir.windows}" type="dir"/>
+    <available property="isWorkingSvnDirAvailable" file="${working.svn.dir.windows}" 
+      type="dir"/>
     <condition property="_isWorkingSvnDirAvailable.set" else="false">
       <isset property="isWorkingSvnDirAvailable"/>
     </condition>
@@ -240,6 +252,25 @@
     <echo message="${working.svn.dir.linux2}"/>-->
     <echo message="${working.svn.dir.windows}"/>
     <echo message="Is Svn working directory available?: ${_isWorkingSvnDirAvailable.set}"/>
+  </target>
+
+  <target name="testWorkingGitHubDir" depends="testWorkingGitDir" if="${isWorkingGitDir}">
+    <available property="workingGitHubDir" 
+      file="${working.github.dir.linux1}" type="dir" value="${working.github.dir.linux1}"/>
+    <available property="workingGitHubDir" 
+      file="${working.github.dir.linux2}" type="dir" value="${working.github.dir.linux2}"/>
+    <available property="workingGitHubDir" 
+      file="${working.github.dir.windows}" type="dir" value="${working.github.dir.windows}"/>
+    <condition property="workingGitHubDir.set" else="false">
+      <isset property="workingGitHubDir"/>
+    </condition>
+    <echo message="Valid GitHub working directories:"/>
+    <echo message="${working.github.dir.linux1}"/>
+    <echo message="${working.github.dir.linux2}"/>
+    <echo message="${working.github.dir.windows}"/>
+    <echo message="Is GitHub working directory available?: ${workingGitHubDir.set}"/>
+    <echo message="Working GitHub directory:"/>
+    <echo message="${workingGitHubDir}"/>
   </target>
 
   <target name="-initGit-user.commits-since-last-svn-commit">
@@ -301,6 +332,24 @@
     <antcall target="incrementGit-user.commits-since-last-svn-commit"/>
   </target>
   
+  <target name="-doCommitGitHub">
+    <local name="_commitMessage"/>
+    <echo message="Ok ..."/>
+    
+    <input message="commit message: " addproperty="_commitMessage"/>
+    <echo message="adding and committing files ..."/>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${workingGitHubDir} add . -v"/>
+      </args>
+    </git>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${workingGitHubDir} commit -am '${_commitMessage}'"/>
+      </args>
+    </git>
+  </target>
+  
   <target name="-doCommitSvn">
     <local name="_userSuccessSvnResponse"/>
     <local name="_userSuccessSvnResponse.y"/>
@@ -329,6 +378,16 @@
     <echo message="Ok ..."/>
     <echo message="pushing Git ..."/>
     <git gitCommand="push"/>
+  </target>
+  
+  <target name="doPushGitHub" depends="testWorkingGitHubDir" if="${workingGitHubDir.set}">
+    <echo message="Ok ..."/>
+    <echo message="pushing Git ..."/>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${workingGitHubDir} push"/>
+      </args>
+    </git>
   </target>
   
   <target name="doPullGit" depends="testWorkingSvnDir, testOriginGitDir" if="${isWorkingSvnDirAvailable}">
@@ -394,7 +453,35 @@
     <antcall target="doSvnCommitMessage"/>
   </target>
 
+  <target name="commitWorkingGitHub" depends="updateGitHubClone"  if="${workingGitHubDir.set}"
+    description="Update GitHub Clone and Commit to GitHub.">
+    <local name="_userCommitGitHubResponse"/>
+    <local name="_userCommitGitHubResponse.y"/>
+    <local name="_userPushGitHubResponse"/>
+    <local name="_userPushGitHubResponse.y"/>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${workingGitHubDir} status"/>
+      </args>
+    </git>
+    
+    <input message="Add and commit these files? [y n] " 
+      defaultvalue="y" addproperty="_userCommitGitHubResponse" validargs="y,n"/>
+    <condition property="_userCommitGitHubResponse.y">
+      <equals arg1="${_userCommitGitHubResponse}" arg2="y"/>
+    </condition>
+    <antcall target="-doCommitGitHub" if:true="${_userCommitGitHubResponse.y}"/>
+    
+    <input message="Push Git to GitHub Origin? [y n] " 
+      defaultvalue="y" addproperty="_userPushGitHubResponse" validargs="y,n"/>
+    <condition property="_userPushGitHubResponse.y">
+      <equals arg1="${_userPushGitHubResponse}" arg2="y"/>
+    </condition>
+    <antcall target="doPushGitHub" if:true="${_userPushGitHubResponse.y}"/>
+  </target>
+
   <extension-point name="commitGit" depends="commitWorkingGit"/>
   <extension-point name="commitSvn" depends="commitWorkingSvn"/>
+  <extension-point name="commitGitHub" depends="commitWorkingGitHub"/>
   
 </project>
