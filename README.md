@@ -1,5 +1,5 @@
 ## mtf.datatype
-The work in this repository takes a [ <a href="https://www.niem.gov/Pages/default.aspx" target="_blank">NIEM-based</a> ] approach for describing the MIL-STD-6040 USMTF-XML messages ENSIT and EOBSREP in XML Schema.
+The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing the MIL-STD-6040 USMTF-XML messages ENSIT and EOBSREP in XML Schema.
 
 Start with 
 
@@ -19,11 +19,11 @@ The MIL-STD-6040 USMTF-XML messages ENSIT (Enemy Situational Awareness) and EOBS
 
 SIGACT is a message data type implemented by USA C2 systems, CPOF is one of them.  SIGACT messages are proprietary to USA, whereas USMTF is a Joint Military message standard.  Therefore, interoperability between tactical data systems is gained from facilitating data exchanges between SIGACT and USMTF compatible endpoints.
 
-#Development Product For Software Developers
-This work also strives to create a deployable development product that software developers can exercise and reuse to expedite their implementation and integration.  Beyond XML Schema documents, this work includes the following capabilities:
+#Development Product
+This work also strives to create a product that software developers can deploy, exercise, and reuse to expedite their implementation and integration.  Beyond XML Schema documents, this work includes the following capabilities:
 
             *  Git repository
-            *  Ant and Maven-driven test, build, and packaging task automation
+            *  Ant and Maven-driven test, build, and packaging automation
             *  XSL 3.0 XML and JSON data format transformations
             *  XSL Schematron build and application rule validation
                 

@@ -5,11 +5,11 @@
         <link rel="stylesheet" type="text/css" href="./css/palette.css"/>
     </head>
     <body>
-        <p>This work is part of a larger effort on producing NIEM-based SOI-provided data types.  The effort is driven by a call for the adoption of a [ <a href="https://www.niem.gov/Pages/default.aspx" target="_blank">NIEM-based</a> ] approach to the implemention of standards-based XML data exchanges.  Therefore, the work implements the NIEM data component framework, which includes selected community described data components, wherever applicable.  In addition, the work follows NIEM guidelines and conformance rules.</p>
-        <p>This work also strives to create a practical development product that software developers can reuse to expedite their implementation and integration.  Beyond creating static XML Schema documents, this work includes the following:</p>
+        <p>This work is part of a larger effort on producing NIEM-based SOI-provided data types.  The effort is driven by a call for the adoption of a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach to the implemention of standards-based XML data exchanges.  Therefore, the work implements the NIEM data component framework, which includes selected community described data components, wherever applicable.  In addition, the work follows NIEM guidelines and conformance rules.</p>
+        <p>This work also strives to create a product that software developers can deploy, exercise, and reuse to expedite their implementation and integration.  Beyond creating static XML Schema documents, this work includes the following:</p>
         <ul>
             <li>  Git repository for maximum portability</li>
-            <li>  Ant and Maven-driven test, build, and packaging task automation</li>
+            <li>  Ant and Maven-driven test, build, and packaging automation</li>
             <li>  XSL 3.0 XML and JSON data format transformations</li>
             <li>  XSL Schematron build and application rule validation</li>
         </ul>
@@ -24,13 +24,13 @@
         <h1>Development</h1>
         <p>The development of a SOI-provided NIEM-based data type shall include the following:</p>
         <ul>
-            <li>  Identify and swap data components with NIEM data components</li>
-            <li>  Encode XML Schema in accordance to NIEM guidelines</li>
+            <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Map-and-Model.aspx" target="_blank">Identify and swap</a> ] data components with NIEM data components, where possible</li>
+            <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Build-and-Validate.aspx" target="_blank">Encode</a> ] XML Schema in accordance to [ <a href="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/" target="_blank">NIEM guidelines</a> ]</li>
             <li>  Map data components for a non-NIEM-based data type to a NIEM-based data type, and the converse</li>
             <li>  Develop a capability to validate application rules</li>
             <li>  Develop a capability to transform a non-NIEM-based data type to a NIEM-based data type, and the converse</li>
             <li>  Automate the validation of data structures and application rules for XML instances</li>
-            <li>  Automate the testing and build process for the NIEM-based data type package</li>
+            <li>  Automate the testing and build process that assembles the [ <a href="https://www.niem.gov/technical/Pages/Exchange-Assemble-And-Document.aspx" target="_blank">NIEM-based data type package</a> ]</li>
             <li>  Automate the distribution of changes to managed repositories, to include Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank">SoiMessaging</a> ].</li>
         </ul>
         
