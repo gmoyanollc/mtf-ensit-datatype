@@ -7,9 +7,9 @@
 <!--
     doGitSvn.ant contains tasks that support the following repository work flow:
    
-            /....................................\
-            |             git origin             |
-            \..................................../ 
+            /..................................\
+            |             git origin           |
+            \................................../ 
                 |                          |
                / \                         |
                 |                         \ /
@@ -17,17 +17,24 @@
     /.....................\    /.........................\
     |  working git clone  |    |  working svn git clone  |
     \...................../    \........................./
-                                           |
-                                           |
-                                          \ /
-                                           |
-                                   /..................\
-                                   |  svn repository  |
-                                   \................../
+                |                          |
+                |                          |
+               \ /                        \ /
+                |                          |
+       /................\        /..................\
+       |  github clone  |        |  svn repository  |
+       \................/        \................../
+                |
+                |
+               \ /                
+                |
+       /.................\
+       |  github origin  |
+       \................./       
 
-    Task are oriented for execution in a git bash session on a Windows platform.
-    The Windows platform facilitates network and CAC-authenticated connectivity.
-    A Linux platform is used for software development purposes.
+    Task are oriented for execution on Linux or a git bash session on a Windows platform.
+    The Windows platform is relied upon for network and CAC-authenticated connectivity.
+    Software development is performed on a Linux platform.
     
     author: George Moyano
     version: 1.0.1 
