@@ -1,5 +1,5 @@
 ## mtf.datatype
-The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing the MIL-STD-6040 USMTF-XML messages ENSIT and EOBSREP in XML Schema.
+The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing mtf.datatype, a NIEM-conformant XML representation for the messages ENSIT and EOBSREP in MIL-STD-6040 USMTF-XML.
 
 Start with 
 
@@ -15,17 +15,40 @@ In a target directory, enter:
 
     
 #USMTF ENSIT and EOBSREP
-The MIL-STD-6040 USMTF-XML messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are the initial candidate messages for NIEM-conformance since their content most closely resemble a USA SIGACT (Significant Activity) message.  Support for certain SIGACT messages is provided by USMC MC2SA TSOA, a sponsor for this work.
+The MIL-STD-6040 USMTF-XML messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are described by this work as NIEM-conformant mtf.datatype messages.  ENSIT and EOBSREP most closely resemble a USA SIGACT (Significant Activity) message supported by USMC MC2SA TSOA, a sponsor of this effort.
 
-SIGACT is a message data type implemented by USA C2 systems, CPOF is one of them.  SIGACT messages are proprietary to USA, whereas USMTF is a Joint Military message standard.  Therefore, interoperability between tactical data systems is gained from facilitating data exchanges between SIGACT and USMTF compatible endpoints.
+When data components are mapped between message data formats, instances may be transformed between message data formats.  The following diagram depicts an example transformation from one format to another:
+
+    /------------\    /--------------------------\
+    |   SIGACT   |    |  Sigact-to-mtf.datatype  |
+    |  instance  |    |     XSL instructions     |
+    \------------/    \--------------------------/
+            \              /
+             |             |
+             V             V
+          /-------------------\
+         /     Transformer     \
+        /        service        \
+        \-----------------------/
+                    |
+                    V
+           /----------------\
+           |  mtf.datatype  |
+           |    instance    |
+           \----------------/
+
+#USA SIGACT to USMTF
+SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a joint military data type.  Each military force collaborates in the stewardship of the message type.  
+Therefore, SIGACT messages are transformed to USMTF messages to increase interoperability between tactical data systems.
 
 #Development Product
-This work also strives to create a product that software developers can deploy, exercise, and reuse to expedite their implementation and integration.  Beyond XML Schema documents, this work includes the following capabilities:
+This work also strives to create a product that software developers can easily deploy, exercise, and reuse.  Beyond the XML Schema documents that describe mtf.datatype, this work includes the following capabilities:
 
             *  Git repository
             *  Ant and Maven-driven test, build, and packaging automation
             *  XSL 3.0 XML and JSON data format transformations
             *  XSL Schematron build and application rule validation
+            *  USMTF-XML componentization and classification
                 
 This work product is structured in a Maven directory structure and most of the artifacts may be found under the folder: 
 
