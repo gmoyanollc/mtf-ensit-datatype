@@ -38,19 +38,30 @@ When data components are mapped between message data formats, instances may be t
            \----------------/
 
 #USA SIGACT to USMTF
-SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a joint military data type.  Each military force collaborates in the stewardship of the message type.  
-Therefore, SIGACT messages are transformed to USMTF messages to increase interoperability between tactical data systems.
+SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a joint military force defined data type.  Military forces collaborate in the on-going stewardship of the USMTF data type.  
+Therefore, SIGACT messages are transformed to a representation of USMTF messages to increase interoperability between tactical data systems.
 
-#Development Product
-This work also strives to create a product that software developers can easily deploy, exercise, and reuse.  Beyond the XML Schema documents that describe mtf.datatype, this work includes the following capabilities:
+#Development "Friction"
+This work strives to alleviate the "friction" that often times is experienced by a software developer when only XML Schema files are provided.  
+
+In addition to XML Schema files and documentation, the following capabilities and artifacts are included in this work product:
 
             *  Git repository
             *  Ant and Maven-driven test, build, and packaging automation
             *  XSL 3.0 XML and JSON data format transformations
             *  XSL Schematron build and application rule validation
             *  USMTF-XML componentization and classification
+
+A software developer can therefore deploy, exercise, and reuse this product in their own development environment.  
+
+Example benefits to a software developer are the following:
+
+            *  Testing tasks may be reused to troubleshoot and validate a configuration
+            *  Validation and transformation instructions should ease and expedite development
+            *  Sample results may be compared with development and integration results
+            *  Artifacts and transformations may be reused to update mtf.datatype from a new version of USMTF-XML.
                 
-This work product is structured in a Maven directory structure and most of the artifacts may be found under the folder: 
+Implementing the familiar Maven file structure, most of the artifacts are found under the folder: 
 
     ./src/main/resources 
 
