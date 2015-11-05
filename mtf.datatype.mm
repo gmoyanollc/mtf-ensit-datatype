@@ -58,8 +58,8 @@
 <node TEXT="Identify and swap components, when possible" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_1207895997" CREATED="1446588169035" MODIFIED="1446596411609">
 <node TEXT="NIEM Schema Subset Generation tool" ID="ID_504952895" CREATED="1446588409237" MODIFIED="1446588731294" LINK="https://tools.niem.gov/niemtools/ssgt/index.iepd"/>
 </node>
-<node TEXT="Encode XML Schema" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_554236134" CREATED="1446588210462" MODIFIED="1446595998885">
-<node TEXT="NIEM Naming and Design Rules (NDR)" ID="ID_1483688258" CREATED="1446588237491" MODIFIED="1446588312712" LINK="https://www.niem.gov/technical/Pages/version-3.aspx">
+<node TEXT="Encode XML Schema" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_554236134" CREATED="1446588210462" MODIFIED="1446660180978">
+<node TEXT="NIEM Naming and Design Rules (NDR)" ID="ID_1483688258" CREATED="1446588237491" MODIFIED="1446660180972" LINK="https://www.niem.gov/technical/Pages/version-3.aspx">
 <node TEXT="SOI NDR aligned" ID="ID_761321265" CREATED="1446591488211" MODIFIED="1446591497392"/>
 </node>
 </node>
@@ -89,7 +89,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 </node>
 </node>
@@ -106,7 +105,6 @@
     </p>
   </body>
 </html>
-
 </richcontent>
 </node>
 </node>

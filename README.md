@@ -1,23 +1,28 @@
 ## mtf.datatype
-The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing mtf.datatype, a NIEM-conformant XML representation for the messages ENSIT and EOBSREP in MIL-STD-6040 USMTF-XML.
+The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing mtf.datatype, a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.
 
 Start with 
 
     ./readme.html
     
-after downloading and expanding the zip provided by GitHub.
+after downloading and expanding the zip file provided by GitHub.
 
-If you want to clone the repository, download [ <a href="https://git-scm.com" target="_blank">git</a> ], if you don't already have it.
+If you want to clone this repository, download [ <a href="https://git-scm.com" target="_blank">git</a> ] first, if you don't already have it.
 
-In a target directory, enter:
+Then, with git installed, enter the following in a target directory:
 
     git clone https://github.com/gmoyanollc/mtf.datatype.git
 
     
 #USMTF ENSIT and EOBSREP
-The MIL-STD-6040 USMTF-XML messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are described by this work as NIEM-conformant mtf.datatype messages.  ENSIT and EOBSREP most closely resemble a USA SIGACT (Significant Activity) message supported by USMC MC2SA TSOA, a sponsor of this effort.
+The MIL-STD-6040 USMTF messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are described by this work by NIEM-conformant mtf.datatype.  ENSIT and EOBSREP are the base messages for a USA SIGACT (Significant Activity) message supported by [ <a href="https://marinecorpsconceptsandprograms.com/programs/command-and-controlsituational-awareness-c2sa/tactical-service-oriented-architecture-tsoa" target="_blank">USMC MC2SA TSOA</a> ], a sponsor of this effort.
 
-When data components are mapped between message data formats, instances may be transformed between message data formats.  The following diagram depicts an example transformation from one format to another:
+#USA SIGACT to USMTF
+SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a Joint Staff, Military Services defined specification for C2 messages.  Its stewardship is on-going and collaborated upon by Joint Staff and Military Services.  
+
+Since mtf.datatype is based on USMTF proscribed messages, mtf.datatype increases interoperability between tactical data systems (TDS) that implement USMTF.  Whether the TDS implements "slash-dash" or a variant XML representation, interoperability is increased by transforming SIGACT messages to mtf.datatype.
+
+Transformations are possible by mapping data components between each data type.  The following diagram depicts an example transformation from one format to another:
 
     /------------\    /--------------------------\
     |   SIGACT   |    |  Sigact-to-mtf.datatype  |
@@ -37,12 +42,8 @@ When data components are mapped between message data formats, instances may be t
            |    instance    |
            \----------------/
 
-#USA SIGACT to USMTF
-SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a joint military force defined data type.  Military forces collaborate in the on-going stewardship of the USMTF data type.  
-Therefore, SIGACT messages are transformed to a representation of USMTF messages to increase interoperability between tactical data systems.
-
-#Development "Friction"
-This work strives to alleviate the "friction" that often times is experienced by a software developer when only XML Schema files are provided.  
+#Developer "Friction"
+This work strives to alleviate the "friction" that often times is experienced by software developers when only XML Schema files are provided.  
 
 In addition to XML Schema files and documentation, the following capabilities and artifacts are included in this work product:
 
@@ -61,7 +62,7 @@ Example benefits to a software developer are the following:
             *  Sample results may be compared with development and integration results
             *  Artifacts and transformations may be reused to update mtf.datatype from a new version of USMTF-XML.
                 
-Implementing the familiar Maven file structure, most of the artifacts are found under the folder: 
+Implementing a familiar Maven file structure, most of the artifacts are found under the folder: 
 
     ./src/main/resources 
 
