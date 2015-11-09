@@ -20,7 +20,7 @@ The MIL-STD-6040 USMTF messages ENSIT (Enemy Situational Awareness) and EOBSREP 
 #USA SIGACT to USMTF
 SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a Joint Staff, Military Services defined specification for C2 messages.  Its stewardship is on-going and collaborated upon by Joint Staff and Military Services.  
 
-Since mtf.datatype is based on USMTF proscribed messages, mtf.datatype increases interoperability between tactical data systems (TDS) that implement USMTF.  Whether the TDS implements USMTF classic "slash-dash" or a variant XML representation, interoperability is increased by transforming SIGACT messages to mtf.datatype.  Transformations are possible by mapping data components between a data types.  
+Since mtf.datatype is based on USMTF proscribed messages, mtf.datatype increases interoperability between tactical data systems (TDS) that implement USMTF.  Whether the TDS implements USMTF authoritative "slash-dash" or a variant XML representation, interoperability is increased by transforming SIGACT messages to mtf.datatype.  Transformations are possible by mapping data components between a data types.  
 
 The following diagram depicts an example transformation from a SIGACT instance to a mtf.datatype instance:
 
