@@ -42,7 +42,7 @@ The following diagram depicts an example transformation from a SIGACT instance t
            |    instance    |
            \----------------/
                     
-Ultimately, if USMTF classic "slash-dash" is required, a transformation may follow to create a classic MTF "slash-dash" instance:
+Ultimately, if USMTF authoritative "slash-dash" is required, a transformation may follow to create a MTF "slash-dash" instance:
 
            /----------------\    /---------------------------------\
            |  mtf.datatype  |    |  mtf.datatype-to-mtf.slashdash  |
