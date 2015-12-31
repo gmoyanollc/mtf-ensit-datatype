@@ -3,13 +3,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>mil.usmc.mc2sa.tsoa.soi</groupId>
-  <artifactId>sigact.datatype</artifactId>
-  <version>2.0alpha</version>
+  <groupId>http://metadata.ces.mil/dse/ns/usmc/mc2sa/tsoa/mtf</groupId>
+  <artifactId>mtf.datatype</artifactId>
+  <version>0.2</version>
   <packaging>jar</packaging>
 
-  <name>sigact.datatype</name>
-  <url>https://mc2sa.usmc.mil/tsoa/soi/datatype</url>
+  <name>mtf.datatype</name>
+  <url>http://metadata.ces.mil/dse/ns/usmc/mc2sa/tsoa/mtf</url>
   <inceptionYear>2015</inceptionYear>
   <licenses>
     <license>
@@ -26,15 +26,15 @@
     <developer>
       <name>George Moyano</name>
       <organization>ManTech International</organization>
-      <url>https://twitter.com/george_moyano</url>
+      <url>http://www.gmoyano.com</url>
     </developer>
   </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <env.camel.version>2.15.2</env.camel.version>
+    <!--<env.camel.version>2.15.2</env.camel.version>-->
     <env.saxon.version>9.6.0-6</env.saxon.version>
-    <env.spring.version>4.1.5.RELEASE</env.spring.version>
+    <!--<env.spring.version>4.1.5.RELEASE</env.spring.version>-->
     <env.slf4j.version>1.6.1</env.slf4j.version>
   </properties>
 
@@ -83,7 +83,7 @@
     
     <!-- logging -->
     
-<!--    <dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${env.slf4j.version}</version>
@@ -101,7 +101,7 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.3</version>
-    </dependency>-->
+    </dependency>
 
     <!--    <dependency>
       <groupId>commons-io</groupId>
@@ -138,12 +138,12 @@
       <scope>test</scope>
     </dependency>-->
     
-<!--    <dependency>
+    <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
       <version>${env.saxon.version}</version>
       <scope>test</scope>
-    </dependency>-->
+    </dependency>
     
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>

@@ -3,9 +3,16 @@
   xmlns:if="ant:if"
   xmlns:unless="ant:unless"
   xmlns:au="antlib:org.apache.ant.antunit">
-
-<!--
-    doGitSvn.ant contains tasks that support the following repository work flow:
+<description>
+    The task 'commitGit' interactively steps through most of workflow diagrammed below,
+    including task 'commitSVN'.
+    
+        ant -f doGitSvn.ant commitGit
+            
+    Alternatively, main tasks may be run individually.  
+    The task 'commitGitHub' is .
+    
+    doGitSvn.ant supports the following repository work flow:
    
             /..................................\
             |             git origin           |
@@ -31,27 +38,33 @@
        /.................\
        |  github origin  |
        \................./       
-
-    Task are oriented for execution on Linux or a git bash session on a Windows platform.
+    
+    Tasks are oriented for execution on Linux or a git bash session on a Windows platform.
     The Windows platform is relied upon for network and CAC-authenticated connectivity.
     Software development is performed on a Linux platform.
     
-    author: George Moyano
-    version: 1.0.1 
-    updated: Oct 2015
--->
-
+    The following command displays main tasks and their description:
+    
+        ant -file doGitSvn.ant -projecthelp
+        
+        
+     --------------------------
+    -- author:  George Moyano --
+    -- version: 1.0.3         --
+    -- updated: Dec 2015      --
+     --------------------------
+</description>
   <defaultexcludes add="**/.git/**, **/.gitignore"/>
   <property name="working.git.dir.linux1" value="/home/g/sf_gData_2015TaskNiem/mtf.datatype"/>
   <property name="working.git.dir.linux2" value="/media/sf_gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype"/>
-  <property name="working.git.dir.windows" value="F:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype"/>
+  <property name="working.git.dir.windows" value="D:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype"/>
   <property name="origin.git.dir.windows" value="Z:\mtf.datatype.git"/>
   <!--<property name="working.svn.dir.linux1" value="/home/g/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>
   <property name="working.svn.dir.linux2" value="/media/sf_gPublished/Project/TSOA/Product/ForgeSoiMessaging/TsoaInformationModel/DataFormat/mtf.datatype"/>-->
-  <property name="working.svn.dir.windows" value="F:\gPublished\Project\TSOA\Product\ForgeSoiMessaging\TsoaInformationModel\DataFormat\mtf.datatype"/>
+  <property name="working.svn.dir.windows" value="D:\gPublished\Project\TSOA\Product\ForgeSoiMessaging\TsoaInformationModel\DataFormat\mtf.datatype"/>
   <property name="working.github.dir.linux1" value="/home/g/sf_gData_2015TaskNiem/mtf.datatype.github/mtf.datatype"/>
   <property name="working.github.dir.linux2" value="/media/sf_gData/Project/TSOA/Schema/Product/2015TaskNiem/mtf.datatype.github/mtf.datatype"/>
-  <property name="working.github.dir.windows" value="F:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype.github\mtf.datatype"/>
+  <property name="working.github.dir.windows" value="D:\gData\Project\TSOA\Schema\Product\2015TaskNiem\mtf.datatype.github\mtf.datatype"/>
   <property name="documentation.dir" value="src/main/resources/documentation/"/>
   <property name="temp.file" value="ignore.ant"/>
 
@@ -60,7 +73,14 @@
     <attribute name="result"/>
     <sequential>
       <script language="javascript">
-        project.setProperty("@{result}", parseInt("@{operator1}")+1);
+        <!--project.setProperty("@{result}", parseInt("@{operator1}")+1);-->
+        {
+          var operator1 = parseInt("@{operator1}");
+          if ( isNaN(operator1) )
+            project.setProperty("@{result}", 1); 
+          else
+            project.setProperty("@{result}", operator1 + 1);
+        }
       </script>
     </sequential>
   </macrodef>
@@ -120,7 +140,7 @@
     <sequential>
       <git-get gitCommand="config" outputproperty="@{git-user.commits-since-last-svn-commit}">
         <args>
-          <arg line="--global --get user.commits-since-last-svn-commit"/>
+          <arg line="--local --get user.commits-since-last-svn-commit"/>
         </args>
       </git-get>
     </sequential>
@@ -197,7 +217,7 @@
     <echo message="Git user.commits-since-last-svn-commit: ${_git-user.commits-since-last-svn-commit++}"/>
     <git gitCommand="config">
       <args>
-        <arg line="--global user.commits-since-last-svn-commit ${_git-user.commits-since-last-svn-commit++}"/>
+        <arg line="--local user.commits-since-last-svn-commit ${_git-user.commits-since-last-svn-commit++}"/>
       </args>
     </git>
     <antcall target="testGit-user.commits-since-last-svn-commit"/>
@@ -218,7 +238,7 @@
     </condition>
     <echo message="Does Git user.commits-since-last-svn-commit exist?: ${_git-user.commits-since-last-svn-commit.exist}"/>
     <antcall target="-initGit-user.commits-since-last-svn-commit" 
-        if:true="${_git-user.commits-since-last-svn-commit}"/>  
+      if:blank="${_git-user.commits-since-last-svn-commit}"/>  
   </target>
 
   <target name="testWorkingGitDir">
@@ -234,6 +254,11 @@
     <echo message="${working.git.dir.linux2}"/>
     <echo message="${working.git.dir.windows}"/>
     <echo message="Valid Git working directory?: ${isWorkingGitDir}"/>
+    <fail>
+	  <condition>
+	    <equals arg1="${isWorkingGitDir}" arg2="false"/>
+	  </condition>
+	</fail>
   </target>
   
   <target name="testOriginGitDir" if="${isWorkingGitDir}">
@@ -245,6 +270,11 @@
     <echo message="Valid Git Origin directory:"/>
     <echo message="${origin.git.dir.windows}"/>
     <echo message="Is Git Origin directory available?: ${_isOriginGitDirAvailable.set}"/>
+	<fail>
+	  <condition>
+	    <equals arg1="${_isOriginGitDirAvailable.set}" arg2="false"/>
+	  </condition>
+	</fail>
   </target>
   
   <target name="testWorkingSvnDir" depends="testWorkingGitDir" if="${isWorkingGitDir}">
@@ -259,6 +289,11 @@
     <echo message="${working.svn.dir.linux2}"/>-->
     <echo message="${working.svn.dir.windows}"/>
     <echo message="Is Svn working directory available?: ${_isWorkingSvnDirAvailable.set}"/>
+	<fail>
+	  <condition>
+	    <equals arg1="${_isWorkingSvnDirAvailable.set}" arg2="false"/>
+	  </condition>
+	</fail>
   </target>
 
   <target name="testWorkingGitHubDir" depends="testWorkingGitDir" if="${isWorkingGitDir}">
@@ -278,23 +313,28 @@
     <echo message="Is GitHub working directory available?: ${workingGitHubDir.set}"/>
     <echo message="Working GitHub directory:"/>
     <echo message="${workingGitHubDir}"/>
+	<fail>
+	  <condition>
+	    <equals arg1="${workingGitHubDir.set}" arg2="false"/>
+	  </condition>
+	</fail>
   </target>
 
   <target name="-initGit-user.commits-since-last-svn-commit">
     <echo message="initializing Git user.commits-since-last-svn-commit ..."/>
     <git gitCommand="config">
       <args>
-        <arg line="--global --add user.commits-since-last-svn-commit 0"/>
+        <arg line="--local --add user.commits-since-last-svn-commit 0"/>
       </args>
     </git>
     <antcall target="testGit-user.commits-since-last-svn-commit"/>
   </target>
   
-  <target name="-disposeGit-user.commits-since-last-svn-commit">
+  <target name="disposeGit-user.commits-since-last-svn-commit">
     <echo message="disposing Git user.commits-since-last-svn-commit ..."/>
     <git gitCommand="config">
       <args>
-        <arg line="--global --unset user.commits-since-last-svn-commit"/>
+        <arg line="--local --unset user.commits-since-last-svn-commit"/>
       </args>
     </git>
   </target>
@@ -312,7 +352,7 @@
     <echo message="reading file containing generated SVN Commit message ..."/>
     <loadfile property="_commitMessage.file" srcfile="${temp.file}" failonerror="true"/>
     <echo message="${_commitMessage.file}"/>
-    <input message="Add and commit these files? [y n] " 
+    <input message="Add and commit these files to SVN repository? [y n] " 
       defaultvalue="y" addproperty="_userCommitSvnResponse" validargs="y,n"/>
     <condition property="_userCommitSvnResponse.y">
       <equals arg1="${_userCommitSvnResponse}" arg2="y"/>
@@ -377,7 +417,7 @@
     <condition property="_userSuccessSvnResponse.y">
       <equals arg1="${_userSuccessSvnResponse}" arg2="y"/>
     </condition>
-    <antcall target="-disposeGit-user.commits-since-last-svn-commit" 
+    <antcall target="disposeGit-user.commits-since-last-svn-commit" 
       if:true="${_userSuccessSvnResponse.y}"/>
   </target>
   
@@ -418,9 +458,11 @@
     <local name="_userPushGitResponse.y"/>
     <local name="_userCommitSvnResponse"/>
     <local name="_userCommitSvnResponse.y"/>
+    <local name="_userCommitGitHubResponse"/>
+    <local name="_userCommitGitHubResponse.y"/>
     <git gitCommand="status"/>
     
-    <input message="Add and commit these files? [y n] " 
+    <input message="Add and commit these files to local Git repository? [y n] " 
       defaultvalue="y" addproperty="_userCommitGitResponse" validargs="y,n"/>
     <condition property="_userCommitGitResponse.y">
       <equals arg1="${_userCommitGitResponse}" arg2="y"/>
@@ -440,6 +482,13 @@
       <equals arg1="${_userCommitSvnResponse}" arg2="y"/>
     </condition>
     <antcall target="commitWorkingSvn" if:true="${_userCommitSvnResponse.y}"/>
+    
+    <input message="Add and commit to local GitHub repository? [y n] " 
+      defaultvalue="y" addproperty="_userCommitGitHubResponse" validargs="y,n"/>
+    <condition property="_userCommitGitHubResponse.y">
+      <equals arg1="${_userCommitGitHubResponse}" arg2="y"/>
+    </condition>
+    <antcall target="commitWorkingGitHub" if:true="${_userCommitGitHubResponse.y}"/>
   </target>
 
   <target name="commitWorkingSvn" 
@@ -472,7 +521,7 @@
       </args>
     </git>
     
-    <input message="Add and commit these files? [y n] " 
+    <input message="Add and commit these files to GitHub repository? [y n] " 
       defaultvalue="y" addproperty="_userCommitGitHubResponse" validargs="y,n"/>
     <condition property="_userCommitGitHubResponse.y">
       <equals arg1="${_userCommitGitHubResponse}" arg2="y"/>
@@ -486,6 +535,7 @@
     </condition>
     <antcall target="doPushGitHub" if:true="${_userPushGitHubResponse.y}"/>
   </target>
+
 
   <extension-point name="commitGit" depends="commitWorkingGit"/>
   <extension-point name="commitSvn" depends="commitWorkingSvn"/>
