@@ -4,14 +4,11 @@
   xmlns:unless="ant:unless"
   xmlns:au="antlib:org.apache.ant.antunit">
 <description>
-    The task 'commitGit' interactively steps through most of workflow diagrammed below,
-    including task 'commitSVN'.
+    'commitGit' interactively steps through the workflow diagrammed below,
+    including 'commitSVN' and commitGitHub.
     
         ant -f doGitSvn.ant commitGit
             
-    Alternatively, main tasks may be run individually.  
-    The task 'commitGitHub' is .
-    
     doGitSvn.ant supports the following repository work flow:
    
             /..................................\
@@ -38,15 +35,17 @@
        /.................\
        |  github origin  |
        \................./       
+
+    Alternatively, main tasks may be run individually.  
     
+    The following command displays main tasks and their description:
+    
+    ant -file doGitSvn.ant -projecthelp
+
     Tasks are oriented for execution on Linux or a git bash session on a Windows platform.
     The Windows platform is relied upon for network and CAC-authenticated connectivity.
     Software development is performed on a Linux platform.
     
-    The following command displays main tasks and their description:
-    
-        ant -file doGitSvn.ant -projecthelp
-        
         
      --------------------------
     -- author:  George Moyano --
@@ -439,8 +438,13 @@
   
   <target name="doPullGit" depends="testWorkingSvnDir, testOriginGitDir" if="${isWorkingSvnDirAvailable}">
     <echo message="Ok ..."/>
-    <echo message="pulling Git to target directory:"/>
+    <echo message="resetting and pulling Git to target directory:"/>
     <echo message="${working.svn.dir.windows}"/>
+    <git gitCommand="-C">
+      <args>
+        <arg line="${working.svn.dir.windows} reset --hard HEAD"/>
+      </args>
+    </git> 
     <git gitCommand="-C">
       <args>
         <arg line="${working.svn.dir.windows} pull"/>

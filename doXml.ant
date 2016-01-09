@@ -34,6 +34,16 @@
   
   <property name="temp.file" value="ignore.ant"/>
 <!--  <property name="test.output.dir" value="${basedir}/src/test/resources"/>-->
+  <property name="base.mtf.input.dir" 
+    value="${basedir}/src/main/resources/base-xsd/external/usmtf/USMTFJune2015Baseline6040WithDoc"/>
+  <property name="base.mtf.output.dir" 
+    value="${basedir}/src/main/resources/base-xsd/external/usmtf"/>
+  <property name="base.mtf.xsl.dir" 
+    value="${basedir}/src/main/resources/transform/classifyUsmtf"/>
+  <property name="base.schematron-iso.dir" 
+    value="${basedir}/src/main/resources/validate/external/iso-schematron-xslt2-2010"/>
+  <property name="base.schematron-niem.dir" 
+    value="${basedir}/src/main/resources/validate/external/NIEM-NDR-3.0-2014-07-31"/>
   <property name="base.xml.input.dir" 
     value="/home/g/sf_gPublished/Product/TSOA/Schema/SigAct/SigAct_100_Instance"/>
   <property name="base.xml.output.dir" 
@@ -41,10 +51,6 @@
   <property name="base.xml.schema" value="${base.xsd.dir}/extension/Ensit.xsd"/>
   <property name="base.xml.namespace" 
     value="http://metadata.ces.mil/dse/ns/usmc/mc2sa/tsoa/mtf/ensit/0.2/ensit"/>
-  <property name="base.schematron-iso.dir" 
-    value="${basedir}/src/main/resources/validate/external/iso-schematron-xslt2-2010"/>
-  <property name="base.schematron-niem.dir" 
-    value="${basedir}/src/main/resources/validate/external/NIEM-NDR-3.0-2014-07-31"/>
   <property name="base.xsd.dir" value="${basedir}/src/main/resources/base-xsd"/>
   <property name="base.xsl.dir" value="${basedir}/src/main/resources/transform"/>
   <!--<property name="xsl-transformer" value="/usr/share/java/saxon/saxon.jar"/>-->
@@ -172,15 +178,6 @@
     <attribute name="outFileDir"/>
     <attribute name="outFileNameExtension"/>
     <sequential>
-      <!--<xslt in="@{inFileDir}/@{inFileSet}" 
-        out="@{outFileDir}/@{inFileSet}_@{xslFileName}_output.@{outFileNameExtension}"
-        style="@{xslFileDir}/@{xslFileName}" force="true">-->
-      <!--<local name="file.set"/>-->
-      <!-- read fileset into a property formatted as a list of lines -->
-      <!--<pathconvert property="file.set" pathsep="${line.separator}">
-        <map from="@{inFileDir}${file.separator}" to=""/>
-        <fileset includes="@{inFileSet}" dir="@{inFileDir}"/>
-      </pathconvert>-->
       <xslt  
         destdir="@{outFileDir}" force="true"
         style="@{xslFileDir}/@{xslFileName}" useimplicitfileset="false">
@@ -191,6 +188,30 @@
         <classpath path="${xsl-transformer}"/>
         <fileset includes="@{inFileSet}" dir="@{inFileDir}"/>        
       </xslt>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="IterateXslTransform">
+    <attribute name="inXslFileList"/>
+    <element name="call" implicit="yes"/>
+    <sequential>
+      <local name="inXslFileList.element"/>
+      <local name="inXslFileList.nextElement"/>
+      <local name="hasElement"/>
+      <loadresource property="inXslFileList.element" unless:blank="@{inXslFileList}">
+        <concat>@{inXslFileList}</concat>
+      </loadresource>
+      <call/>
+      
+      <condition property="hasElement">
+        <contains string="@{inXslFileList}" substring=";"/>
+      </condition>
+      <loadresource property="inXslFileList.nextElement" if:true="${hasElement}">
+        <concat>@{inXslFileList}</concat>
+      </loadresource>
+      <IterateXslTransform inXslFileList="${inXslFileList.nextElement}" if:true="${hasElement}">
+        <call/>
+      </IterateXslTransform>
     </sequential>
   </macrodef>
   
@@ -397,5 +418,19 @@
       inXmlNamespace="${xmlNamespace}"/>
   </target>
   
+  <target name="classifyMtf"
+    description="Optional arguments: [argInputFileSet] [argXslFileSet] [argOutputDir]">
+    <fileset id="idXslFileSet" dir="${base.mtf.xsl.dir}" includes="classify*.xsl"/>
+    <pathconvert refid="idXslFileSet" property="XslFileList"/>
+    <echo message="$${XslFileList}: ${XslFileList}"></echo>
+    <IterateXslTransform inXslFileList="${XslFileList}" unless:blank="${XslFileList}">
+      <echo message="I see: ${inXslFileList.element}"/>
+    </IterateXslTransform>
+  </target>
+
+  <target name="transformXml-to-Json"/>
+  
+  <target name="transformJson-to-Xml"/>
+
   <extension-point name="doXml" depends=""/>
 </project>

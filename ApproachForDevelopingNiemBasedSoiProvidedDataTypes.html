@@ -8,10 +8,10 @@
         <p>This work is part of a larger effort on producing NIEM-based SOI-provided data types.  The effort is driven by a call for the adoption of a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach to the implementation of standards-based XML data exchanges.  Therefore, the work implements the NIEM data component framework, which includes selected community described data components, wherever applicable.  In addition, the work follows NIEM guidelines and conformance rules.</p>
         <p>This work also strives to create a product that software developers can deploy, exercise, and reuse.  Beyond creating static XML Schema documents, this work includes the following:</p>
         <ul>
-            <li>  Git repository for maximum portability</li>
-            <li>  Ant and Maven-driven test, build, and packaging automation</li>
-            <li>  XSL 3.0 XML and JSON data format transformations</li>
-            <li>  XSL Schematron build and application rule validation</li>
+            <li>  [ <a href="https://en.wikipedia.org/wiki/Git_%28software%29" target="_blank">Git</a> ] repository</li>
+            <li>  [ <a href="https://en.wikipedia.org/wiki/Apache_Ant" target="_blank">Apache Ant</a> ] and Maven test, build, and packaging automation</li>
+            <li>  [ <a href="http://www.w3.org/TR/xslt-30/#whats-new-in-xslt3" target="_blank" title="Click for what's new in XSL 3!">W3C XSL 3.0</a> ] XML and JSON format transformations</li>
+            <li>  ISO-19757 Document Schema Definition Languages (DSDL) [ <a href="https://en.wikipedia.org/wiki/Schematron" target="_blank">Schematron rule-based validation</a> ] </li>
         </ul>
         
         <h1>Directive</h1>
@@ -22,17 +22,60 @@
          <p>New SOI XML data types shall be developed in accordance to the NIEM-based approach.</p>
         
         <h1>Development</h1>
-        <p>The development of a SOI-provided NIEM-based data type shall include the following:</p>
+        <p>The development cycle shall be interative as follows:</p>
+        <pre>
+     <- - - - - - - - - - - - - - <-
+    :          developer environment ^        
+    v                                :
+    :  /-------------------\         :
+    :  |  Identify & Swap  |  <- - - - - - - - - - - - - - - - - - - - <-
+    :  \-------------------/         :                                    \
+    :             \                  :                                     \
+    :              |                 :                                      \
+    :              V                 :                                       \
+    :      /------------------\      :                                        \
+    :      |  Encode & Adapt  |      :                                         \
+    :      \------------------/      :                                          \
+    :                 \              :                                           \
+    :                  |             :                                            \
+    :                  V             :                                             \
+    :          /------------------\  :                                              \
+    :          |  Map & Generate  |  :                                               \
+    :          \------------------/  ^                                                \
+    v                     \          :
+     -> - - - - - - - - - -\ - - - ->                                                  ^
+                            \                                                          :
+                             \          <- - - - - - - - - - - - - - - - - - <-        :
+                              \        :               test & build environment ^      :
+                               \       v                                        :      :
+                                \      :   /------------\                       :      :
+                                  -- -- >  |  Validate  |                       :      :
+                                       :   \------------/                       :      :
+                                       :          \                             :      :
+                                       :           |                            :      :
+                                       :           V                            :      :
+                                       :       /-----------------------\        :      :
+                                       :       |  Generate & Validate  |        :      :
+                                       :       \-----------------------/        :      ^
+                                       :                   \                    :      :
+                                       :                   |                    :      
+                                       :                   V                    :     /
+                                       :           /------------------------\   :    /
+                                       :           |  Package & Distribute  |  - - ->
+                                       :           \------------------------/   ^
+                                       v                                        :
+                                        -> - - - - - - - - - - - - - - - - - ->
+        </pre>
         <ul>
             <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Map-and-Model.aspx" target="_blank">Identify and swap</a> ] data components with NIEM data components, where possible</li>
-            <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Build-and-Validate.aspx" target="_blank">Encode</a> ] XML Schema in accordance to [ <a href="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/" target="_blank">NIEM guidelines</a> ]</li>
-            <li>  Map data components for a non-NIEM-based data type to a NIEM-based data type, and the converse</li>
-            <li>  Develop a capability to validate application rules</li>
-            <li>  Develop a capability to transform a non-NIEM-based data type to a NIEM-based data type, and the converse</li>
-            <li>  Automate the validation of data structures and application rules for XML instances</li>
-            <li>  Automate the testing and build process that assembles the [ <a href="https://www.niem.gov/technical/Pages/Exchange-Assemble-And-Document.aspx" target="_blank">NIEM-based data type package</a> ]</li>
-            <li>  Automate the distribution of changes to managed repositories, to include Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank">SoiMessaging</a> ].</li>
+            <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Build-and-Validate.aspx" target="_blank">Encode and adapt</a> ] XML Schema data component representations in accordance to [ <a href="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/" target="_blank">NIEM guidelines</a> ]</li>
+            <li>  Map and generate transformations between a non-NIEM-based datatype and its NIEM-based datatype</li>
+            <li>  Validate XML Schema representations and NIEM-conformance</li>
+            <li>  [ <a href="https://www.niem.gov/technical/Pages/Exchange-Assemble-And-Document.aspx" target="_blank">Generate and validate</a> ] NIEM Information Exchange Package (IEP) artifacts, to include exchange samples</li>
+            <li>  Package and distribute changes to managed repositories, to include Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank">SoiMessaging</a> ].</li>
         </ul>
+        
+
         
         <h1>Implementation</h1>
         <p>The implementation of a SOI-provided NIEM-based data type, first and foremost, is dependent on having an end-point that will support a NIEM-based data type.  

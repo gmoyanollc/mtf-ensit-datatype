@@ -1,343 +1,375 @@
-<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>mtf.datatype//mm2html.xsl FreeplaneVersion:freeplane 1.3.0</title><style>
-                body{
-                font-size:10pt;
-                color:rgb(0,0,0);
-                backgound-color:rgb(255,255,255);
-                font-family:sans-serif;
-                }
-                p.info{
-                font-size:8pt;
-                text-align:right;
-                color:rgb(127,127,127);
-                }
-                </style></head><body><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>mtf.datatype</title>
+<style type="text/css">
+    body {}
+li { list-style: none;  margin: 0; }
+p { margin: 0; }
+
+span.foldopened, span.foldclosed  {
+    font-size: xx-small;
+    border-width: 1;
+    font-family: monospace;
+    padding: 0em 0.25em 0em 0.25em;
+    background: #e0e0e0;
+    cursor:pointer;
+}
+span.foldopened  {
+    color: white;
+    VISIBILITY: visible;
+}
+span.foldclosed {
+    color: #666666;
+    VISIBILITY: hidden;
+}
+span.foldspecial {
+    color: #666666;
+    font-size: xx-small;
+    border-style: none solid solid none;
+    border-color: #CCCCCC;
+    border-width: 1;
+    font-family: sans-serif;
+    padding: 0em 0.1em 0em 0.1em;
+    background: #e0e0e0;
+    cursor:pointer;
+}
+span.l { color: red; font-weight: bold; }
+
+a.mapnode:link,
+a.mapnode:visited,
+a.mapnode:active,
+a.mapnode:hover {
+    text-decoration: none; color: black;
+}
+a.mapnode:hover { background: #eeeee0; }
+
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+<script type="text/javascript">
+// Here we implement folding. It works fine with MSIE5.5, MSIE6.0 and
+// Mozilla 0.9.6.
+
+if (document.layers) {
+    //Netscape 4 specific code
+    pre = 'document.';
+    post = ''; }
+if (document.getElementById) {
+    //Netscape 6 specific code
+    pre = 'document.getElementById("';
+    post = '").style'; }
+if (document.all) {
+    //IE4+ specific code
+    pre = 'document.all.';
+    post = '.style'; }
+
+function layer_exists(layer) {
+    try {
+	eval(pre + layer + post);
+	return true; }
+    catch (error) {
+	return false; }}
+
+function show_layer(layer) {
+    eval(pre + layer + post).position = 'relative'; 
+    eval(pre + layer + post).visibility = 'visible'; }
+
+function hide_layer(layer) {
+    eval(pre + layer + post).visibility = 'hidden';
+    eval(pre + layer + post).position = 'absolute'; }
+
+function hide_folder(folder) {
+    hide_folding_layer(folder)
+    show_layer('show'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function show_folder(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+	show_layer('show'+folder+'_'+i); }
+}
+function show_folder_completely(folder) {
+    // Precondition: all subfolders are folded
+
+    show_layer('hide'+folder);
+    hide_layer('show'+folder);
+    show_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+	show_folder_completely(folder+'_'+i); }
+}
+
+
+
+function hide_folding_layer(folder) {
+    var i;
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+	hide_folding_layer(folder+'_'+i); }
+
+    hide_layer('hide'+folder);
+    hide_layer('show'+folder);
+    hide_layer('fold'+folder);
+
+    scrollBy(0,0); // This is a work around to make it work in Browsers (Explorer, Mozilla)
+}
+
+function fold_document() {
+    var i;
+    var folder = '1';
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+	hide_folder(folder+'_'+i); }
+}
+
+function unfold_document() {
+    var i;
+    var folder = '1';
+    for (i=1; layer_exists('fold'+folder+'_'+i); ++i) {
+	show_folder_completely(folder+'_'+i); }
+}
+
+</script>
+<SPAN class="foldspecial" onclick="fold_document()">All +</SPAN>
+<SPAN class="foldspecial" onclick="unfold_document()">All -</SPAN>
+<p><span style="font-size: 18pt; ">mtf.datatype</span>
+<ul><li>repositories</span>
+<ul><li>git</span>
+<ul><li><p>
+      <i><font color="#0000ff">local network</font></i>
+    </p></span>
+
+</li>
+
+</ul>
+</li>
+<li><a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank"><span class=l>~</span>&nbsp;software.forge.mil</span>
+</a>
+
+</li>
+<li><a href="https://github.com/gmoyanollc/mtf.datatype" target="_blank"><span class=l>~</span>&nbsp;GitHub</span>
+</a>
+<ul><li><p>
+      <i><font color="#0000ff">** only documentation **</font></i>
+    </p></span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li>TSOA SOI XML NDR alignment</span>
+
+</li>
+<li><span style="color: #00b439; font-size: 14pt; ">NIEM-based Approach</span>
+<ul><li><span style="color: #990000; font-size: 12pt; ">Identify and swap components, as possible</span>
+<ul><li><a href="https://tools.niem.gov/niemtools/ssgt/index.iepd" target="_blank"><span class=l>~</span>&nbsp;NIEM Schema Subset Generation tool</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Encode XML Schema</span>
+<ul><li><a href="https://www.niem.gov/technical/Pages/version-3.aspx" target="_blank"><span class=l>~</span>&nbsp;NIEM Naming and Design Rules (NDR)</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Validate conformance</span>
+<ul><li><a href="#ID_817564161" target="_blank"><span class=l>~</span>&nbsp;NIEM NDR Schematron Rules</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span id="show1_1" class="foldclosed" onClick="show_folder('1_1')" style="POSITION: absolute">+</span> <span id="hide1_1" class="foldopened" onClick="hide_folder('1_1')">-</span>
+<a href="http://reference.niem.gov/niem/specification/model-package-description/3.0/model-package-description-3.0.html#appendix_C" target="_blank"><span class=l>~</span>&nbsp;<span style="color: #990000; font-size: 12pt; ">Information Exchange Package Description (IEPD)</span>
+</a>
+<ul id="fold1_1" style="POSITION: relative; VISIBILITY: visible;"><li>Resource catalogs</span>
 
-<ul><li><a name="ID_1723255651"></a><span style="color:#000000;font-family:sansserif;font-size:18;">mtf.datatype</span>
+</li>
+<li>Exchange samples</span>
 
+</li>
+<li>Documentation</span>
+
+</li>
+<li><a href="http://reference.niem.gov/niem/specification/model-package-description/3.0/model-package-description-3.0.html#appendix_e" target="_blank"><span class=l>~</span>&nbsp;Directory Structure</span>
+</a>
 
+</li>
 
+</ul>
+</li>
 
-    
+</ul>
+</li>
+<li><span id="show1_2" class="foldclosed" onClick="show_folder('1_2')" style="POSITION: absolute">+</span> <span id="hide1_2" class="foldopened" onClick="hide_folder('1_2')">-</span>
+Ant</span>
+<ul id="fold1_2" style="POSITION: relative; VISIBILITY: visible;"><li><a href="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/doGitSvn.ant" target="_blank"><span class=l>~</span>&nbsp;<span style="color: #111111; ">doGitSvn.ant</span>
+</a>
 
+</li>
+<li><span id="show1_2_1" class="foldclosed" onClick="show_folder('1_2_1')" style="POSITION: absolute">+</span> <span id="hide1_2_1" class="foldopened" onClick="hide_folder('1_2_1')">-</span>
+<a href="../../../../doGitSvn.ant" target="_blank"><span class=l>~</span>&nbsp;doXml.ant</span>
+</a>
+<ul id="fold1_2_1" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_2_1_1" class="foldclosed" onClick="show_folder('1_2_1_1')" style="POSITION: absolute">+</span> <span id="hide1_2_1_1" class="foldopened" onClick="hide_folder('1_2_1_1')">-</span>
+validateNiemConformance</span>
+<ul id="fold1_2_1_1" style="POSITION: relative; VISIBILITY: visible;"><li><a href="../../../test/resources/schematron/report/Ensit.svrl.html" target="_blank"><span class=l>~</span>&nbsp;transformSvrl-to-Html</span>
+</a>
 
+</li>
 
+</ul>
+</li>
+<li>validateXmlSchema</span>
 
+</li>
+<li>validate</span>
 
+</li>
 
+</ul>
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439; font-size: 14pt; ">Dev Automation</span>
+<ul><li><span style="color: #990000; font-size: 12pt; ">Source Management</span>
+<ul><li>commitGit</span>
 
+</li>
+<li>commitSvn</span>
 
+</li>
+<li>commitGitHub</span>
 
+</li>
 
+</ul>
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Build</span>
+<ul><li>generateExchangeSample</span>
+<ul><li>transformXml (Sigact-to-Ensit)</span>
 
+</li>
+<li>transformXml-to-Json (Ensit.xml-to-Ensit.json)</span>
 
+</li>
 
+</ul>
+</li>
+<li>classifyMtf</span>
 
+</li>
 
+</ul>
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Test</span>
+<ul><li>validateNiemConformance</span>
+<ul><li><a href="../../../../src/test/resources/schematron/report/Ensit.svrl.html" target="_blank"><span class=l>~</span>&nbsp;doSvrl-to-Html</span>
+</a>
 
+</li>
 
+</ul>
+</li>
+<li>validateXmlSchema</span>
 
+</li>
+<li>validateExchangeSample</span>
+<ul><li>validateXml (Ensit)</span>
 
+</li>
 
+</ul>
+</li>
 
+</ul>
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Package</span>
 
+</li>
+<li><span style="color: #990000; font-size: 12pt; ">Runtime</span>
+<ul><li>validateXml</span>
 
+</li>
+<li>transformXml</span>
 
+</li>
+<li>transformXml-to-Json</span>
 
+</li>
+<li>transformJson-to-Xml</span>
 
+</li>
 
+</ul>
+</li>
 
+</ul>
+</li>
+<li><span id="show1_3" class="foldclosed" onClick="show_folder('1_3')" style="POSITION: absolute">+</span> <span id="hide1_3" class="foldopened" onClick="hide_folder('1_3')">-</span>
+<span style="color: #00b439; font-size: 14pt; ">Data Component Mapping</span>
+<ul id="fold1_3" style="POSITION: relative; VISIBILITY: visible;"><li><span id="show1_3_1" class="foldclosed" onClick="show_folder('1_3_1')" style="POSITION: absolute">+</span> <span id="hide1_3_1" class="foldopened" onClick="hide_folder('1_3_1')">-</span>
+<a href="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/documentation/ApproachForDevelopingNiemBasedSoiProvidedDataTypes.html" target="_blank"><span class=l>~</span>&nbsp;<span style="color: #990000; font-size: 12pt; ">Componentize and Classify USMTF-XML</span>
+</a>
+<ul id="fold1_3_1" style="POSITION: relative; VISIBILITY: visible;"><li>configurable</span>
 
+</li>
+<li>reuseable</span>
 
+</li>
 
+</ul>
+</li>
+<li><span id="show1_3_2" class="foldclosed" onClick="show_folder('1_3_2')" style="POSITION: absolute">+</span> <span id="hide1_3_2" class="foldopened" onClick="hide_folder('1_3_2')">-</span>
+<span style="color: #990000; font-size: 12pt; ">Map sigact-to-ensit</span>
+<ul id="fold1_3_2" style="POSITION: relative; VISIBILITY: visible;"><li><a href="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/documentation/Sigact-to-Ensit_mapping.html" target="_blank"><span class=l>~</span>&nbsp;generate mapping report</span>
+</a>
 
+</li>
+<li><a href="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/transform/mtf.datatype-projectMapToEnsit.xslt" target="_blank"><span class=l>~</span>&nbsp;generate XSL transformation</span>
+</a>
 
+</li>
 
+</ul>
+</li>
 
+</ul>
+</li>
+<li><span id="show1_4" class="foldclosed" onClick="show_folder('1_4')" style="POSITION: absolute">+</span> <span id="hide1_4" class="foldopened" onClick="hide_folder('1_4')">-</span>
+Maven</span>
+<ul id="fold1_4" style="POSITION: relative; VISIBILITY: visible;"><li>pom.xml</span>
 
+</li>
 
+</ul>
+</li>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<ul><li><a name="ID_1315737132"></a><a style="color:#000000;font-family:sansserif;font-size:10;" href="#ID_334829185">repositories</a>
-
-
-
-
-
-<ul><li><a name="ID_831682193"></a><span style="color:#000000;font-family:sansserif;font-size:10;">git</span>
-
-
-<ul><li><a name="ID_6431607"></a><span style="color:#000000;font-family:sansserif;font-size:10;"></span>
-
-
-
-
-  
-    
-  
-  
-    
-      local network
-    
-  
-
-
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_829668239"></a><span style="color:#000000;font-family:sansserif;font-size:10;">software.forge.mil</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1395945860"></a><span style="color:#000000;font-family:sansserif;font-size:10;">GitHub</span>
-
-
-<ul><li><a name="ID_1364426558"></a><span style="color:#000000;font-family:sansserif;font-size:10;"></span>
-
-
-
-
-  
-    
-  
-  
-    
-      ** only documentation **
-    
-  
-
-
-
-
-</li></ul>
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1017669443"></a><a style="color:#000000;font-family:sansserif;font-size:10;" href="#ID_1483688258">TSOA SOI XML NDR alignment</a>
-
-
-
-
-
-</li></ul>
-<ul><li><a name="ID_1701967329"></a><a style="color:#000000;font-family:sansserif;font-size:10;" href="#ID_1524594098">Maven</a>
-
-
-
-
-
-<ul><li><a name="ID_405788924"></a><span style="color:#000000;font-family:sansserif;font-size:10;">pom.xml</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_481003859"></a><span style="color:#00b439;font-family:sansserif;font-size:14;">NIEM-based Approach</span>
-
-
-<ul><li><a name="ID_1207895997"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Identify and swap components, as possible</span>
-
-
-<ul><li><a name="ID_504952895"></a><span style="color:#000000;font-family:sansserif;font-size:10;">NIEM Schema Subset Generation tool</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_554236134"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Encode XML Schema</span>
-
-
-<ul><li><a name="ID_1483688258"></a><span style="color:#000000;font-family:sansserif;font-size:10;">NIEM Naming and Design Rules (NDR)</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1669243496"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Validate conformance</span>
-
-
-<ul><li><a name="ID_1566241224"></a><span style="color:#000000;font-family:sansserif;font-size:10;">NIEM NDR Schematron Rules</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1950086451"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Information Exchange Package Description (IEPD)</span>
-
-
-<ul><li><a name="ID_83627432"></a><span style="color:#000000;font-family:sansserif;font-size:10;">Resource catalogs</span>
-
-
-</li></ul>
-<ul><li><a name="ID_890760657"></a><span style="color:#000000;font-family:sansserif;font-size:10;">Exchange samples</span>
-
-
-</li></ul>
-<ul><li><a name="ID_923031173"></a><span style="color:#000000;font-family:sansserif;font-size:10;">Documentation</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1823476923"></a><span style="color:#000000;font-family:sansserif;font-size:10;">Directory Structure</span>
-
-
-</li></ul>
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1794138944"></a><a style="color:#000000;font-family:sansserif;font-size:10;" href="#ID_1524594098">Ant</a>
-
-
-
-
-
-<ul><li><a name="ID_1508492770"></a><span style="color:#111111;font-family:sansserif;font-size:10;">doGitSvn.ant</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1161476964"></a><span style="color:#000000;font-family:sansserif;font-size:10;">doXml.ant</span>
-
-
-<ul><li><a name="ID_344729475"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validateNiemConformance</span>
-
-
-<ul><li><a name="ID_552266845"></a><span style="color:#000000;font-family:sansserif;font-size:10;">transformSvrl-to-Html</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1000187264"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validateXmlSchema</span>
-
-
-</li></ul>
-<ul><li><a name="ID_681530234"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validate</span>
-
-
-</li></ul>
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1524594098"></a><span style="color:#00b439;font-family:sansserif;font-size:14;">Dev Automation</span>
-
-
-<ul><li><a name="ID_334829185"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Source Management</span>
-
-
-<ul><li><a name="ID_708859920"></a><span style="color:#000000;font-family:sansserif;font-size:10;">commitGit</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1778329803"></a><span style="color:#000000;font-family:sansserif;font-size:10;">commitSvn</span>
-
-
-</li></ul>
-<ul><li><a name="ID_617988962"></a><span style="color:#000000;font-family:sansserif;font-size:10;">commitGitHub</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_557651092"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Build</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1219104467"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Test</span>
-
-
-
-<ul><li><a name="ID_1126389827"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validateNiemConformance</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1881663087"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validateXmlSchema</span>
-
-
-</li></ul>
-<ul><li><a name="ID_817564161"></a><span style="color:#000000;font-family:sansserif;font-size:10;">transformSvrl-to-Html</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_422687706"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Package</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1419080670"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Runtime</span>
-
-
-<ul><li><a name="ID_4843173"></a><span style="color:#000000;font-family:sansserif;font-size:10;">validateXmlInstance</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1727399656"></a><span style="color:#000000;font-family:sansserif;font-size:10;">transformSigact-to-Ensit</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1461632017"></a><span style="color:#000000;font-family:sansserif;font-size:10;">transformXml-to-Json</span>
-
-
-</li></ul>
-<ul><li><a name="ID_122616634"></a><span style="color:#000000;font-family:sansserif;font-size:10;">transformJson-to-Xml</span>
-
-
-</li></ul>
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_344800390"></a><span style="color:#00b439;font-family:sansserif;font-size:14;">Data Component Mapping</span>
-
-
-<ul><li><a name="ID_835637402"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Componentize and Classify USMTF-XML</span>
-
-
-<ul><li><a name="ID_1080845703"></a><span style="color:#000000;font-family:sansserif;font-size:10;">configurable</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1091244301"></a><span style="color:#000000;font-family:sansserif;font-size:10;">reuseable</span>
-
-
-</li></ul>
-</li></ul>
-<ul><li><a name="ID_1977042831"></a><span style="color:#990000;font-family:sansserif;font-size:12;">Map sigact-to-mtf.datatype</span>
-
-
-<ul><li><a name="ID_955384310"></a><span style="color:#000000;font-family:sansserif;font-size:10;">generate report</span>
-
-
-</li></ul>
-<ul><li><a name="ID_1501024459"></a><span style="color:#000000;font-family:sansserif;font-size:10;">generate XSL instructions</span>
-
-
-</li></ul>
-</li></ul>
-</li></ul>
-</li></ul>
-</p><p class="info">mtf.datatype//mm2html.xsl FreeplaneVersion:freeplane 1.3.0</p></body></html>
+</ul><SCRIPT type="text/javascript">
+fold_document();
+</SCRIPT>
+</body>
+</html>
