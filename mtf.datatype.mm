@@ -113,7 +113,7 @@
 <node TEXT="Directory Structure" ID="ID_1823476923" CREATED="1446594016824" MODIFIED="1446594122296" LINK="http://reference.niem.gov/niem/specification/model-package-description/3.0/model-package-description-3.0.html#appendix_e"/>
 </node>
 </node>
-<node TEXT="Ant" LOCALIZED_STYLE_REF="defaultstyle.floating" POSITION="right" ID="ID_1794138944" CREATED="1447791529411" MODIFIED="1447796490012" HGAP="-78" VSHIFT="126">
+<node TEXT="Ant" LOCALIZED_STYLE_REF="defaultstyle.floating" POSITION="right" ID="ID_1794138944" CREATED="1447791529411" MODIFIED="1452540498374" HGAP="-78" VSHIFT="126">
 <hook NAME="FreeNode"/>
 <arrowlink SHAPE="CUBIC_CURVE" COLOR="#000000" WIDTH="2" TRANSPARENCY="80" FONT_SIZE="9" FONT_FAMILY="SansSerif" DESTINATION="ID_1524594098" STARTINCLINATION="93;118;" ENDINCLINATION="144;198;" STARTARROW="NONE" ENDARROW="DEFAULT"/>
 <node TEXT="doGitSvn.ant" LOCALIZED_STYLE_REF="AutomaticLayout.level,4" ID="ID_1508492770" CREATED="1446587295971" MODIFIED="1447790930214" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/doGitSvn.ant"/>
@@ -135,7 +135,9 @@
 <node TEXT="Build" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_557651092" CREATED="1446586959983" MODIFIED="1452279180780">
 <node TEXT="generateExchangeSample" ID="ID_1225224015" CREATED="1447794548556" MODIFIED="1452279187543">
 <node TEXT="transformXml (Sigact-to-Ensit)" ID="ID_1014219457" CREATED="1452279083602" MODIFIED="1452279750150"/>
-<node TEXT="transformXml-to-Json (Ensit.xml-to-Ensit.json)" ID="ID_241090952" CREATED="1452280011555" MODIFIED="1452280227839"/>
+<node TEXT="transformXml-to-Json (Ensit.xml-to-Ensit.json)" ID="ID_241090952" CREATED="1452280011555" MODIFIED="1452535511898">
+<font ITALIC="false"/>
+</node>
 </node>
 <node TEXT="classifyMtf" ID="ID_1478418504" CREATED="1452279369234" MODIFIED="1452279388807"/>
 </node>
@@ -160,12 +162,14 @@
 <node TEXT="Data Component Mapping" LOCALIZED_STYLE_REF="AutomaticLayout.level,2" POSITION="right" ID="ID_344800390" CREATED="1446586680338" MODIFIED="1446595935784" HGAP="10" VSHIFT="70">
 <edge STYLE="bezier" COLOR="#00ff00" WIDTH="2"/>
 <node TEXT="Componentize and Classify USMTF-XML" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_835637402" CREATED="1446587901842" MODIFIED="1446596028753" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/documentation/ApproachForDevelopingNiemBasedSoiProvidedDataTypes.html">
-<node TEXT="configurable" ID="ID_1080845703" CREATED="1446589105693" MODIFIED="1446589269773"/>
-<node TEXT="reuseable" ID="ID_1091244301" CREATED="1446589276622" MODIFIED="1446589288358"/>
+<node TEXT="configurable (mtfClassGraph.xml)" ID="ID_1080845703" CREATED="1446589105693" MODIFIED="1452536195033"/>
+<node TEXT="reuseable (classify*.xsl)" ID="ID_1091244301" CREATED="1446589276622" MODIFIED="1452536245813"/>
 </node>
-<node TEXT="Map sigact-to-ensit" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_1977042831" CREATED="1446587938533" MODIFIED="1447794183927">
-<node TEXT="generate mapping report" ID="ID_955384310" CREATED="1446588965395" MODIFIED="1447794886478" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/documentation/Sigact-to-Ensit_mapping.html"/>
-<node TEXT="generate XSL transformation" ID="ID_1501024459" CREATED="1446588995883" MODIFIED="1447794942718" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/transform/mtf.datatype-projectMapToEnsit.xslt"/>
+<node TEXT="Map &amp; Generate" LOCALIZED_STYLE_REF="AutomaticLayout.level,3" ID="ID_1977042831" CREATED="1446587938533" MODIFIED="1452535719364">
+<node TEXT="generate mapping report (Sigact-to-Ensit_mapping.html)" ID="ID_955384310" CREATED="1446588965395" MODIFIED="1452536318326" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/documentation/Sigact-to-Ensit_mapping.html">
+<font BOLD="false"/>
+</node>
+<node TEXT="generate transformation (SigAct_1.1MapToEnsit.xslt)" ID="ID_1501024459" CREATED="1446588995883" MODIFIED="1452536003326" LINK="file:///home/g/sf_gData_2015TaskNiem/mtf.datatype/src/main/resources/transform/mtf.datatype-projectMapToEnsit.xslt"/>
 </node>
 </node>
 <node TEXT="Maven" LOCALIZED_STYLE_REF="defaultstyle.floating" POSITION="right" ID="ID_1701967329" CREATED="1447792456418" MODIFIED="1447796505269" HGAP="-186" VSHIFT="254">

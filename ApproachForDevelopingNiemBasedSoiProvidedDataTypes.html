@@ -5,21 +5,20 @@
         <link rel="stylesheet" type="text/css" href="./css/palette.css"/>
     </head>
     <body>
-        <p>This work is part of a larger effort on producing NIEM-based SOI-provided data types.  The effort is driven by a call for the adoption of a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach to the implementation of standards-based XML data exchanges.  Therefore, the work implements the NIEM data component framework, which includes selected community described data components, wherever applicable.  In addition, the work follows NIEM guidelines and conformance rules.</p>
-        <p>This work also strives to create a product that software developers can deploy, exercise, and reuse.  Beyond creating static XML Schema documents, this work includes the following:</p>
+        <h1>Introduction</h1>
+        <p>The memorandum "Adoption of the National Information Exchange Model within the Department of Defense" (March 28, 2013) calls for the adoption of a NIEM-based approach, an approach that facilitates the deployment of standards-based XML data exchanges.  Therefore, the development of new SOI-provided XML data types shall follow a NIEM-based approach.  Major revisions to existing data types should also follow the NIEM-based approach, when applicable and practical.</p>
+        
+        <p>Therefore, the TSOA approach to developing new SOI-provided data types is largely proscribed by <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NEIM specifications and guidance</a>.  This approach requires the implementation of foundational NIEM data components and encourages the reuse of data components already described by the NIEM community.</p>  
+        
+        <p>The TSOA approach also strives to produce a product that other software developers can deploy, exercise, and reuse.  For example, beyond creating static XML Schema documents, this approach implements the following:</p>
         <ul>
             <li>  [ <a href="https://en.wikipedia.org/wiki/Git_%28software%29" target="_blank">Git</a> ] repository</li>
             <li>  [ <a href="https://en.wikipedia.org/wiki/Apache_Ant" target="_blank">Apache Ant</a> ] and Maven test, build, and packaging automation</li>
             <li>  [ <a href="http://www.w3.org/TR/xslt-30/#whats-new-in-xslt3" target="_blank" title="Click for what's new in XSL 3!">W3C XSL 3.0</a> ] XML and JSON format transformations</li>
             <li>  ISO-19757 Document Schema Definition Languages (DSDL) [ <a href="https://en.wikipedia.org/wiki/Schematron" target="_blank">Schematron rule-based validation</a> ] </li>
         </ul>
-        
-        <h1>Directive</h1>
-        <p>The memorandum "Adoption of the National Information Exchange Model within the Department of Defense" (March 28, 2013) calls for the adoption of the NIEM-based approach for implementing standards-based XML data exchanges.</p>
+        <p>Furthermore, the standardized TSOA approach encourages software developers to also deploy, exercise, and reuse a common test and build environment which is supported by automated test, build, and package tasks.</p>
 
-        <h1>Adoption</h1>
-        <p>SOI-provided XML data types shall be migrated over time in accordance to the NIEM-based approach.  NIEM-based data types may be deployed in parallel with non-NIEM-based data types.  Parallel support of both data types should maximize the capatibilities of end-points that only support non-NIEM-based data types.  Non-NIEM-based data types shall be sunset when all relevant end-points support NIEM-based data types.</p>
-         <p>New SOI XML data types shall be developed in accordance to the NIEM-based approach.</p>
         
         <h1>Development</h1>
         <p>The development cycle shall be interative as follows:</p>
@@ -75,15 +74,11 @@
             <li>  Package and distribute changes to managed repositories, to include Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank">SoiMessaging</a> ].</li>
         </ul>
         
-
-        
-        <h1>Implementation</h1>
-        <p>The implementation of a SOI-provided NIEM-based data type, first and foremost, is dependent on having an end-point that will support a NIEM-based data type.  
-            An end-point that supports a NIEM-based data type may also support a non-NIEM-based data type.  The NIEM-based data type package includes validation and transformation capabilities the end-point may implement.</p>
-        <p></p>
+        <h1>End-Product</h1>
+        <p>The end-product goal is a NIEM-conformant data type package and common test and build environment that may be deployed, exercised, and re-used by interested software developers.  Along with the XML Schema, an end-point may implement certain components directly, such as rule-based validation and data transformation instructions.  Other components are readily available for analysis and troubleshooting, and further development and testing.</p>
         
         <h1>Maintenance</h1>
-        <p>As with other software components, a data type and its packaged components should evolve to improve their usability and relevancy, both for information systems and their builders.  Towards this premise, SOI-provided XML data types and their packaged components shall be maintained.</p>
+        <p>A data type and its packaged components should be continually updated and improved to maintain their usability and relevancy.  Towards this premise, SOI-provided XML data types and their packaged components shall be maintained.</p>
         
     </body>
 </html>
