@@ -1,5 +1,5 @@
 ## mtf.datatype
-The work in this repository takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing mtf.datatype, a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.
+Mtf.datatype takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.
 
 Start with 
 
@@ -15,12 +15,12 @@ Then, with git installed, enter the following in a target directory:
 
     
 #USMTF ENSIT and EOBSREP
-The MIL-STD-6040 USMTF messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are described by this work by NIEM-conformant mtf.datatype.  ENSIT and EOBSREP are the base messages for a USA SIGACT (Significant Activity) message supported by [ <a href="https://marinecorpsconceptsandprograms.com/programs/command-and-controlsituational-awareness-c2sa/tactical-service-oriented-architecture-tsoa" target="_blank">USMC MC2SA TSOA</a> ], a sponsor of this effort.
+MIL-STD-6040 USMTF messages ENSIT (Enemy Situational Awareness) and EOBSREP (Enemy Observation Report) are base messages for a USA SIGACT (Significant Activity) message supported by [ <a href="https://marinecorpsconceptsandprograms.com/programs/command-and-controlsituational-awareness-c2sa/tactical-service-oriented-architecture-tsoa" target="_blank">USMC MC2SA TSOA</a> ], a sponsor of this effort.
 
 #USA SIGACT to USMTF
 SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a Joint Staff, Military Services defined specification for C2 messages.  Its stewardship is on-going and collaborated upon by Joint Staff and Military Services.  
 
-Since mtf.datatype is based on USMTF proscribed messages, mtf.datatype increases interoperability between tactical data systems (TDS) that implement USMTF.  Whether the TDS implements USMTF authoritative "slash-dash" or a variant XML representation, interoperability is increased by transforming SIGACT messages to mtf.datatype.  Transformations are possible by mapping data components between a data types.  
+mtf.datatype transforms SIGACT messages to a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.  Transformations are possible by mapping data components between a data types.  
 
 The following diagram depicts an example transformation from a SIGACT instance to a mtf.datatype instance:
 
@@ -42,7 +42,7 @@ The following diagram depicts an example transformation from a SIGACT instance t
                    |    instance    |
                    \----------------/
                     
-Ultimately, if USMTF authoritative "slash-dash" is required, a transformation may follow to create a MTF "slash-dash" instance:
+Ultimately, if USMTF authoritative "slash-dash" is required, a transformation may follow that creates a MTF "slash-dash" instance:
 
             /----------------\    /---------------------------------\
             |  mtf.datatype  |    |  mtf.datatype-to-mtf.slashdash  |
@@ -61,6 +61,8 @@ Ultimately, if USMTF authoritative "slash-dash" is required, a transformation ma
                       |  mtf.slashdash  |
                       |    instance     |
                       \-----------------/
+                      
+The same may be true for producing a USMTF authoritative XML-MTF instance.
 
 #Developer "Friction"
 This work strives to alleviate the "friction" that often times is experienced by software developers when only XML Schema files are provided.  
