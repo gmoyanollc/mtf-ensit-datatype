@@ -55,7 +55,11 @@
 /* gINSERT */
 a { color: #FF9900; }
 h1 { color: #FF0000; font-size: 2em; }
+h2 { color: #FF0000; font-size: 1.5em; }
+h3 { color: #FF0000; font-size: 1em; }
 li, p { color: #999933; font-size: 1.5em; }
+.p2 { font-size: 1.25em; }
+.p3 { font-size: 1em; }
 li {  line-height: 2; }
 pre { color: #FFFF00; font-size: 2em; }
 body { background-color: #333333; }

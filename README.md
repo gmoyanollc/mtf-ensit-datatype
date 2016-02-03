@@ -7,7 +7,7 @@ Start with
     
 after downloading and expanding the zip file provided by GitHub.
 
-If you want to clone this repository, download [ <a href="https://git-scm.com" target="_blank">git</a> ] first, if you don't already have it.
+To clone this repository, download [ <a href="https://git-scm.com" target="_blank">git</a> ] first, if you don't already have it.
 
 Then, with git installed, enter the following in a target directory:
 
@@ -74,6 +74,7 @@ In addition to XML Schema files and documentation, the following capabilities an
             *  XSL 3.0 XML and JSON data format transformations
             *  XSL Schematron build and application rule validation
             *  USMTF-XML componentization and classification
+            *  Exploratory RDF gleaning of relevant things and facts (triples)
 
 A software developer can therefore deploy, exercise, and reuse this product in their own development environment.  
 
@@ -83,6 +84,7 @@ Example benefits to a software developer are the following:
             *  Validation and transformation instructions should ease and expedite development
             *  Sample results may be compared with development and integration results
             *  Artifacts and transformations may be reused to update mtf.datatype from a new version of USMTF-XML.
+            *  Exploratory work in RDF gleaning may bootstrap other efforts to describe and extract relevant things and facts (triples) from information exchange instances.
                 
 Implementing a familiar Maven file structure, most of the artifacts are found under the folder: 
 

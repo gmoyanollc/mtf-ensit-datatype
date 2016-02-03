@@ -95,9 +95,8 @@
     <element name="args" optional="true"/>
     <sequential>
       <echo message="git @{gitCommand}"/>
-      <!-- gMODIFY -->
-      <!--<exec executable="git" dir="@{dir}">-->
-      <exec executable="git" dir="@{dir}" outputproperty="@{outputproperty}" output="@{output}">
+      <exec executable="git" dir="@{dir}" failonerror="false" 
+        outputproperty="@{outputproperty}" output="@{output}">
         <arg value="@{gitCommand}"/>
         <args/>
       </exec>
@@ -112,7 +111,7 @@
     <element name="args" optional="true"/>
     <sequential>
       <echo message="git @{gitCommand}"/>
-      <exec executable="git" dir="@{dir}">
+      <exec executable="git" dir="@{dir}" failonerror="true">
         <arg value="@{gitCommand}"/>
         <args/>
       </exec>
@@ -151,7 +150,7 @@
       <local name="_git-user.commits-since-last-svn-commit"/>
       <echo message="getting Git user.commits-since-last-svn-commit ..."/>
       <getGit-user.commits-since-last-svn-commit 
-        Git-user.commits-since-last-svn-commit="_git-user.commits-since-last-svn-commit"/>   
+        git-user.commits-since-last-svn-commit="_git-user.commits-since-last-svn-commit"/>   
       <echo message="generating Git log output with ${_git-user.commits-since-last-svn-commit} commit(s) ..."/>
       <git-get gitCommand="log" outputproperty="@{gitLogMessage}">
         <args>
@@ -167,7 +166,7 @@
     <element name="args" optional="true"/>
     <sequential>
       <echo message="svn @{svnCommand}"/>
-      <exec executable="svn" dir="@{dir}">
+      <exec executable="svn" dir="@{dir}" failonerror="true">
         <arg value="@{svnCommand}"/>
         <args/>
       </exec>
@@ -498,11 +497,11 @@
   <target name="commitWorkingSvn" 
     depends="testWorkingGitDir, testGit-user.commits-since-last-svn-commit"
     if="${isWorkingGitDir}"
-    description="Pull Git Origin and commit SVN working copy.">
+    description="Pull Git Origin and commit the SVN working copy.">
     <local name="_userPullGitResponse"/>
     <local name="_userPullGitResponse.y"/>
     
-    <input message="Pull Git Origin to SVN working copy? [y n] " 
+    <input message="Before committing changes, pull Git Origin to the SVN working copy? [y n] " 
       defaultvalue="y" addproperty="_userPullGitResponse" validargs="y,n"/>
     <condition property="_userPullGitResponse.y">
       <equals arg1="${_userPullGitResponse}" arg2="y"/>
