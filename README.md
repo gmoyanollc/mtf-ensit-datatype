@@ -1,5 +1,5 @@
-## mtf.datatype
-Mtf.datatype takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.
+## mtf-ensit-datatype
+mtf-ensit-datatype takes a [ <a href="https://www.niem.gov/technical/Pages/niem.aspx" target="_blank">NIEM-based</a> ] approach for describing a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.
 
 Start with 
 
@@ -11,7 +11,7 @@ To clone this repository, download [ <a href="https://git-scm.com" target="_blan
 
 Then, with git installed, enter the following in a target directory:
 
-    git clone https://github.com/gmoyanollc/mtf.datatype.git
+    git clone https://github.com/gmoyanollc/mtf-ensit-datatype.git
 
     
 #USMTF ENSIT and EOBSREP
@@ -20,14 +20,14 @@ MIL-STD-6040 USMTF messages ENSIT (Enemy Situational Awareness) and EOBSREP (Ene
 #USA SIGACT to USMTF
 SIGACT is a message data type implemented by USA C2 systems. CPOF is one of those systems.  Since USA is the sole steward of the SIGACT data type, it can be argued that the data type is proprietary to USA.  In contrast, USMTF is a Joint Staff, Military Services defined specification for C2 messages.  Its stewardship is on-going and collaborated upon by Joint Staff and Military Services.  
 
-mtf.datatype transforms SIGACT messages to a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.  Transformations are possible by mapping data components between a data types.  
+mtf-ensit-datatype transforms SIGACT messages to a NIEM-conformant XML representation of the MIL-STD-6040 USMTF messages ENSIT and EOBSREP.  Transformations are possible by mapping data components between a data types.  
 
-The following diagram depicts an example transformation from a SIGACT instance to a mtf.datatype instance:
+The following diagram depicts an example transformation from a SIGACT instance to a mtf-ensit-datatype instance:
 
-            /------------\    /--------------------------\
-            |   SIGACT   |    |  Sigact-to-mtf.datatype  |
-            |  instance  |    |     XSL instructions     |
-            \------------/    \--------------------------/
+            /------------\    /--------------------------------\
+            |   SIGACT   |    |  Sigact-to-mtf-ensit-datatype  |
+            |  instance  |    |        XSL instructions        |
+            \------------/    \--------------------------------/
                     \              /
                      |             |
                      V             V
@@ -37,17 +37,17 @@ The following diagram depicts an example transformation from a SIGACT instance t
                 \-----------------------/
                             |
                             V
-                   /----------------\
-                   |  mtf.datatype  |
-                   |    instance    |
-                   \----------------/
+                 /----------------------\
+                 |  mtf-ensit-datatype  |
+                 |       instance       |
+                 \----------------------/
                     
 Ultimately, if USMTF authoritative "slash-dash" is required, a transformation may follow that creates a MTF "slash-dash" instance:
 
-            /----------------\    /---------------------------------\
-            |  mtf.datatype  |    |  mtf.datatype-to-mtf.slashdash  |
-            |    instance    |    |         XSL instructions        |
-            \----------------/    \---------------------------------/
+    /----------------------\    /---------------------------------------\
+    |  mtf-ensit-datatype  |    |  mtf-ensit-datatype-to-mtf.slashdash  |
+    |       instance       |    |            XSL instructions           |
+    \----------------------/    \---------------------------------------/
                        \              /
                         |             |
                         V             V
@@ -83,7 +83,7 @@ Example benefits to a software developer are the following:
             *  Testing tasks may be reused to troubleshoot and validate a configuration
             *  Validation and transformation instructions should ease and expedite development
             *  Sample results may be compared with development and integration results
-            *  Artifacts and transformations may be reused to update mtf.datatype from a new version of USMTF-XML.
+            *  Artifacts and transformations may be reused to update mtf-ensit-datatype from a new version of USMTF-XML.
             *  Exploratory work in RDF gleaning may bootstrap other efforts to describe and extract relevant things and facts (triples) from information exchange instances.
                 
 Implementing a familiar Maven file structure, most of the artifacts are found under the folder: 
@@ -95,7 +95,7 @@ The folders within [ ./src/main/resources ] contain XML Schema files and sample 
 Documentation is contained in the [ ./src/main/resources/documentation ] folder.  Readme files are also contained in folders enhanced by specific instructions.
 
 #Authoritative Sources
-This complete work is maintained on Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf.datatype" target="_blank">SoiMessaging</a> ].  A subset of the work is on GitHub at [ <a href="https://github.com/gmoyanollc/mtf.datatype" target="_blank">gmoyanollc/mtf.datatype</a> ] .
+This complete work is maintained on Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/magtf_c2" target="_blank">USMC - MAGTF C2</a> ] SVN repo [ <a href="https://svn.forge.mil/svn/repos/soimessaging/TsoaInformationModel/DataFormat/mtf-ensit-datatype" target="_blank">SoiMessaging</a> ].  A subset of the work is on GitHub at [ <a href="https://github.com/gmoyanollc/mtf-ensit-datatype" target="_blank">gmoyanollc/mtf-ensit-datatype</a> ] .
 
 This work is derived from authoritative MIL-STD-6040 USMTF XML work maintained on Software Forge.mil at project [ <a href="https://software.forge.mil/sf/projects/mtfxml" target="_blank">MTF XML</a> ].  A subset of the work is also on GitHub at [ <a href="https://github.com/mil-oss/MTFXML" target="_blank">Mil-OSS/MTFXML</a> ] .
 
